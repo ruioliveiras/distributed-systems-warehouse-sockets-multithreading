@@ -14,7 +14,6 @@ public class EmpregadosApp {
     private EmpregadosApp() {}
 
     // instance variables - replace the example below with your own
-    private static EmpresaZeca tab;
     private static Menu menumain, menuad;
 
     // M�todo principal
@@ -39,12 +38,7 @@ public class EmpregadosApp {
                 case 6: totalKms();
             }
         } while (menumain.getOpcao()!=0);
-        try {
-            tab.gravaObj("estado.tabemp");
-        }
-        catch (IOException e) {
-            System.out.println("Não consegui gravar os dados!");
-        }
+        
         System.out.println("Até breve!...");
     }
     
