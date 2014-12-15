@@ -50,10 +50,10 @@ public class WareHouse
     
     public void requisicao(Tarefa t)
     {
-        HashMap<Item, Integer> tarefas = t.getItens();
+        HashMap<Item, Integer> itens = t.getItens();
         Item aux;
         
-        for (Map.Entry<Item, Integer> entry : tarefas.entrySet()) 
+        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
         {
             hashLock.lock();
             try
@@ -71,8 +71,13 @@ public class WareHouse
         }
     }
     
-    public void devolver()
+    public void devolver(Tarefa t)
     {
+        HashMap<Item, Integer> itens = t.getItens();
         
+        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
+        {
+            this.supply(entry.getKey().getNome(), entry.getValue());
+        }
     }
 }
