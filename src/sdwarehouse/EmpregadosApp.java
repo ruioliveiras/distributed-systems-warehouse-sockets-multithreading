@@ -6,10 +6,11 @@
  * @version 1.0
  */
 
+import server.Menu;
 import java.io.IOException;
 import java.util.Scanner;
-public class EmpregadosApp {
-    
+public class EmpregadosApp {}
+    /*
     // Construtor privado (n�o queremos inst�ncias!...)
     private EmpregadosApp() {}
 
@@ -150,7 +151,6 @@ public class EmpregadosApp {
     
     private static void totalKms() {
         System.out.println("Op��o ainda n�o implementada.");
-    }
-}
+    }*/
 
 

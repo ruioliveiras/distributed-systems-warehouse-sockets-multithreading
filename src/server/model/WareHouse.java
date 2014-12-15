@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package sdwarehouse;
+package server.model;
 
 import java.util.HashMap;
 import java.util.Map;

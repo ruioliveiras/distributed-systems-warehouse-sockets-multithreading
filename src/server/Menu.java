@@ -1,3 +1,5 @@
+package server;
+
 
 /**
  * Esta classe implementa um menu em modo texto.

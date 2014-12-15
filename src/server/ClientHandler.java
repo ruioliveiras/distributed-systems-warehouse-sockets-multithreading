@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sdwarehouse;
+package server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,10 +61,28 @@ public class ClientHandler implements Runnable{
        
         switch(messageCode){
             case 1:
-               return sms(this.attrs[0]);
+               return false; //function for code 1;
+            case 2:
+               return false;//function for code 2;
+            case 3:
+               return false;//function for code 3;
             default: 
                 return false;
         }
+    }
+    
+    private int readMessage() throws IOException, NumberFormatException{
+        String[] str = br.readLine().split(",");
+        int messageCode, size;
+        
+        messageCode = Integer.parseInt(str[0]);
+        size = Integer.parseInt(str[1]);
+        attrs = new String[size];
+        
+        for (int i = 0; i < size; i++) {
+            attrs[i] = str[i+2];
+        }
+        return messageCode;
     }
    
     
