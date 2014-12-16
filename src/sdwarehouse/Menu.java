@@ -1,4 +1,4 @@
-
+package sdwarehouse;
 /**
  * Esta classe implementa um menu em modo texto.
  * 
@@ -54,7 +54,7 @@ public class Menu {
         System.out.print("Opção: ");
         op = is.nextInt();
         if (op<0 || op>this.opcoes.size()) {
-            System.out.println("Opção Inválida!!!");
+            System.out.println("Opção Inválida!");
             op = -1;
         }
         return op;
