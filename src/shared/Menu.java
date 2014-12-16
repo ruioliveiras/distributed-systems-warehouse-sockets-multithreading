@@ -1,4 +1,4 @@
-package server;
+package shared;
 /**
  * Esta classe implementa um menu em modo texto.
  * 

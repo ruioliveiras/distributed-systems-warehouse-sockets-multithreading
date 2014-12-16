@@ -1,22 +1,27 @@
+package client;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
+
 
 import shared.Facede;
+import shared.Facede;
 import shared.Menu;
+import shared.Menu;
+
 /**
  *
  * @author Tomás Ferreira
  *
  */
-public class InterfaceAdmin implements Facede {
+public class InterfaceCliente implements Facede {
     
     protected  Menu menumain, menucliente, menuware; 
     
-    protected InterfaceAdmin(){}   
+    protected InterfaceCliente(){}   
     
     public void start() {
         
@@ -40,9 +45,7 @@ public class InterfaceAdmin implements Facede {
     String [] opsclient = {"Registar Utilizador",
                            "Alterar Dados de Utilizador",
                            "Lista de Utilizadores",
-                           "Selecionar Utilizador",
                            "Criar Tarefa",
-                           "Apagar Tarefa",
                            "Alterar Tarefa",
                            "Terminar Tarefa",
                            "Consultar Estado de Tarefa",

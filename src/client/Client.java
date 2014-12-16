@@ -11,72 +11,108 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import shared.ComunicationSocket;
+import shared.Facede;
 
 /**
  *
  * @author ruioliveiras
  */
-public class Client {
+public class Client implements Facede{
     private Socket cliente;
-    private BufferedReader br;
-    private PrintWriter bw;
-  
+    private Socket comunicationSocket; 
     /**
      *
      * @throws IOException
      */
     public Client() throws IOException {
         cliente = new Socket("localhost", 1050);
+        comunicationSocket = new ComunicationSocket(cliente);
+    }
 
-        InputStreamReader isr = new InputStreamReader( cliente.getInputStream());
-        br = new BufferedReader(isr);
-        
-        OutputStreamWriter osr=new OutputStreamWriter( cliente.getOutputStream());
-        bw = new PrintWriter(osr);
-    }
     
-    
-    /*methods */
-    public int sendValue(int value) throws IOException{
-        bw.println(value);
-        bw.flush();
-        String str = br.readLine();
-        int ret;
-        try{
-            ret = Integer.parseInt(str);
-        }catch (NumberFormatException nf){
-            ret = 0;
-        }
-        
-        return ret;
-    }
-    
-    public void sms(String s){
-        sendMessage(1, s);
-    }
-    
-    private void sendMessage(int messageCode, String ... attrs){
-        bw.print(messageCode + "," + attrs.length + ",");
-        for (String attr : attrs) {
-            bw.print(attr + ",");
-        }
-        bw.println("");
-        bw.flush();
-    }
     
     public static void main(String[] args) throws IOException, InterruptedException {
         Client rc = new Client();
         while(true) {
-            
-            rc.sms("ola ");
+//            rc.sms("ola ");
             Thread.sleep(1000l);
         }
-     //    System.out.println(rc.sendValue(1));
+//    System.out.println(rc.sendValue(1));
 //        System.out.println(rc.sendValue(2));
 //        System.out.println(rc.sendValue(3));
 //        System.out.println(rc.sendValue(4));
 //        System.out.println(rc.sendValue(5));
 //        System.out.println(rc.sendValue(6));
-        
+    }
+
+    @Override
+    public void addObj() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void altObj() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void closeTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void editTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void editUser() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void finishedTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void listObj() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void listTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void listUser() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void readyTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void registarUser() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void remObj() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void statusTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
