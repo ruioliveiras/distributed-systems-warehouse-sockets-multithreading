@@ -12,14 +12,16 @@ import shared.Facede;
 import shared.Menu;
 import shared.Menu;
 
+import java.util.Scanner;
+
 /**
  *
  * @author Tomás Ferreira
  *
  */
 public class InterfaceCliente implements Facede {
-    
-    protected  Menu menumain, menucliente, menuware; 
+
+    public  Menu menumain, menucliente, menuware, menuselected; 
     
     protected InterfaceCliente(){}   
     
@@ -45,13 +47,15 @@ public class InterfaceCliente implements Facede {
     String [] opsclient = {"Registar Utilizador",
                            "Alterar Dados de Utilizador",
                            "Lista de Utilizadores",
-                           "Criar Tarefa",
-                           "Alterar Tarefa",
-                           "Terminar Tarefa",
-                           "Consultar Estado de Tarefa",
-                           "Requesitar Notificacao de Tarefa Pronta a ser Executada",
-                           "Requesitar Notificacao de Conclusao de Tarefa",
-                           "Lista de Tarefas"};
+                           "Selecionar Utilizador"};
+    
+    String [] opsclienteSelect = {"Criar Tarefa",
+                                  "Alterar Tarefa",
+                                  "Terminar Tarefa",
+                                  "Consultar Estado de Tarefa",
+                                  "Requesitar Notificacao de Tarefa Pronta a ser Executada",
+                                  "Requesitar Notificacao de Conclusao de Tarefa",
+                                  "Lista de Tarefas"};
 
     String [] opsware = {"Adicionar Objeto",
                          "Retirar Objeto",
@@ -60,6 +64,7 @@ public class InterfaceCliente implements Facede {
     
     menumain = new Menu(ops);
     menucliente = new Menu(opsclient);
+    menuselected = new Menu(opsclienteSelect);
     menuware = new Menu(opsware);
     }
     
@@ -74,19 +79,7 @@ public class InterfaceCliente implements Facede {
                         break;
                 case 3: listUser();
                         break;
-                case 4: addTarefa();
-                        break;
-                case 5: editTarefa();
-                        break;
-                case 6: closeTarefa();
-                        break;
-                case 7: statusTarefa();
-                        break;
-                case 8: readyTarefa();
-                        break;
-                case 9: finishedTarefa();
-                        break;
-                case 10:listTarefa();
+                case 4: selectUser();
                         break;
             }
         } while (menucliente.getOpcao()!=0);
@@ -108,62 +101,122 @@ public class InterfaceCliente implements Facede {
             }
         } while (menuware.getOpcao()!=0);
     }
+    public void selectUser(){
+        Scanner is = new Scanner(System.in);
+        
+        System.out.print("Insira o nome do utilizador a consultar: ");
+        String user = is.nextLine();
+        
+        if(userExiste()) {
+            do {
+                menuselected.executa();
+                switch (menuselected.getOpcao()) {
+                    case 1: addTarefa(user);
+                            break;
+                    case 2: editTarefa(user);
+                            break;
+                    case 3: closeTarefa(user);
+                            break;
+                    case 4: statusTarefa(user);
+                            break;
+                    case 5: readyTarefa(user);
+                            break;
+                    case 6: finishedTarefa(user);
+                            break;
+                    case 7:listTarefa(user);
+                            break;
+                }
+            } while (menuselected.getOpcao()!=0);
+        }
+        else {
+            System.out.println("Utilizador nao Existe!");
+        }
+    }
+    
+    public  boolean userExiste(){
+        return true;
+    }
     
     
+    public  void registarUser(){}
+    
+    
+    public  void editDB(){}
+    
+    
+    public  void listUser(){}
+
+      
+    public  void addTarefa(String user){}
+    
+    
+    public  void editTarefa(String user){}
+    
+    
+    public  void closeTarefa(String user){}
+    
+    
+    public  void statusTarefa(String user){}
+    
+    public  void readyTarefa(String user){}
+   
+    public  void finishedTarefa(String user){}
+    
+    
+    public  void listTarefa(String user){}
+    
+    
+    public  void addObj(){}
+    
+    
+    public  void remObj(){}
+    
+    
+    public  void altObj(){}
+    
+    
+    public  void listObj(){}
+
     @Override
-    public void registarUser(){};
-    
-    
+    public void addTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
-    public  void editUser(){};
-    
-    
+    public void closeTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
-    public  void listUser(){};
-    
-    
+    public void editTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
-    public  void addTarefa(){};
-    
-    
+    public void editUser() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
-    public  void editTarefa(){};
-    
-    
+    public void finishedTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
-    public  void closeTarefa(){};
-    
-    
+    public void listTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
-    public  void statusTarefa(){};
-    
-    
+    public void readyTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     @Override
-    public  void readyTarefa(){};
-    
-    
-    @Override
-    public  void finishedTarefa(){};
-    
-    
-    @Override
-    public  void listTarefa(){};
-    
-    
-    @Override
-    public  void addObj(){};
-    
-    
-    @Override
-    public  void remObj(){};
-    
-    
-    @Override
-    public  void altObj(){};
-    
-    
-    @Override
-    public  void listObj(){};
+    public void statusTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
 
 

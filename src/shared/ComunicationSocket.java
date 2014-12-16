@@ -30,9 +30,9 @@ public class ComunicationSocket {
         OutputStreamWriter osr=new OutputStreamWriter( socket.getOutputStream());
         bw = new PrintWriter(osr);
     }
+
     
-    
-    private void sendMessage(int messageCode, String ... attrs){
+    public void sendMessage(int messageCode, String ... attrs){
         bw.print(messageCode + "," + attrs.length + ",");
         for (String attr : attrs) {
             bw.print(attr + ",");
@@ -41,7 +41,7 @@ public class ComunicationSocket {
         bw.flush();
     }
     
-    private int readMessage() throws IOException, NumberFormatException{
+    public int readMessage() throws IOException, NumberFormatException{
         String[] str = br.readLine().split(",");
         int messageCode, size;
         
