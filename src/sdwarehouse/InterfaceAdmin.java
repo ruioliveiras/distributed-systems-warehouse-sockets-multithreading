@@ -5,6 +5,8 @@
  */
 package sdwarehouse;
 
+import java.util.Scanner;
+
 /**
  *
  * @author Tomás Ferreira
@@ -12,7 +14,7 @@ package sdwarehouse;
  */
 public class InterfaceAdmin {
     
-    private static Menu menumain, menucliente, menuware; 
+    private static Menu menumain, menucliente, menuware, menuselected; 
     
     private InterfaceAdmin(){}   
     
@@ -41,13 +43,15 @@ public class InterfaceAdmin {
     String [] opsclient = {"Registar Utilizador",
                            "Alterar Dados de Utilizador",
                            "Lista de Utilizadores",
-                           "Criar Tarefa",
-                           "Alterar Tarefa",
-                           "Terminar Tarefa",
-                           "Consultar Estado de Tarefa",
-                           "Requesitar Notificacao de Tarefa Pronta a ser Executada",
-                           "Requesitar Notificacao de Conclusao de Tarefa",
-                           "Lista de Tarefas"};
+                           "Selecionar Utilizador"};
+    
+    String [] opsclienteSelect = {"Criar Tarefa",
+                                  "Alterar Tarefa",
+                                  "Terminar Tarefa",
+                                  "Consultar Estado de Tarefa",
+                                  "Requesitar Notificacao de Tarefa Pronta a ser Executada",
+                                  "Requesitar Notificacao de Conclusao de Tarefa",
+                                  "Lista de Tarefas"};
 
     String [] opsware = {"Adicionar Objeto",
                          "Retirar Objeto",
@@ -56,6 +60,7 @@ public class InterfaceAdmin {
     
     menumain = new Menu(ops);
     menucliente = new Menu(opsclient);
+    menuselected = new Menu(opsclienteSelect);
     menuware = new Menu(opsware);
     }
     
@@ -70,19 +75,7 @@ public class InterfaceAdmin {
                         break;
                 case 3: listUser();
                         break;
-                case 4: addTarefa();
-                        break;
-                case 5: editTarefa();
-                        break;
-                case 6: closeTarefa();
-                        break;
-                case 7: statusTarefa();
-                        break;
-                case 8: readyTarefa();
-                        break;
-                case 9: finishedTarefa();
-                        break;
-                case 10:listTarefa();
+                case 4: selectUser();
                         break;
             }
         } while (menucliente.getOpcao()!=0);
@@ -106,46 +99,83 @@ public class InterfaceAdmin {
     }
     
     
-    private static void registarUser(){};
+    private static void selectUser(){
+        Scanner is = new Scanner(System.in);
+        
+        System.out.print("Insira o nome do utilizador a consultar: ");
+        String user = is.nextLine();
+        
+        if(userExiste()) {
+            do {
+                menuselected.executa();
+                switch (menuselected.getOpcao()) {
+                    case 1: addTarefa(user);
+                            break;
+                    case 2: editTarefa(user);
+                            break;
+                    case 3: closeTarefa(user);
+                            break;
+                    case 4: statusTarefa(user);
+                            break;
+                    case 5: readyTarefa(user);
+                            break;
+                    case 6: finishedTarefa(user);
+                            break;
+                    case 7:listTarefa(user);
+                            break;
+                }
+            } while (menuselected.getOpcao()!=0);
+        }
+        else {
+            System.out.println("Utilizador nao Existe!");
+        }
+    }
+    
+    private static boolean userExiste(){
+        return true;
+    }
     
     
-    private static void editDB(){};
+    private static void registarUser(){}
     
     
-    private static void listUser(){};
+    private static void editDB(){}
     
     
-    private static void addTarefa(){};
+    private static void listUser(){}
+
+      
+    private static void addTarefa(String user){}
     
     
-    private static void editTarefa(){};
+    private static void editTarefa(String user){}
     
     
-    private static void closeTarefa(){};
+    private static void closeTarefa(String user){}
     
     
-    private static void statusTarefa(){};
+    private static void statusTarefa(String user){}
     
     
-    private static void readyTarefa(){};
+    private static void readyTarefa(String user){}
+   
+    
+    private static void finishedTarefa(String user){}
     
     
-    private static void finishedTarefa(){};
+    private static void listTarefa(String user){}
     
     
-    private static void listTarefa(){};
+    private static void addObj(){}
     
     
-    private static void addObj(){};
+    private static void remObj(){}
     
     
-    private static void remObj(){};
+    private static void altObj(){}
     
     
-    private static void altObj(){};
-    
-    
-    private static void listObj(){};
+    private static void listObj(){}
 }
 
 
