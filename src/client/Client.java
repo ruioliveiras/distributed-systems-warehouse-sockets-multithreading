@@ -5,36 +5,34 @@
  */
 package client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import shared.ComunicationSocket;
+
 import shared.Facede;
+import shared.SimpleExecption;
 
 /**
  *
  * @author ruioliveiras
  */
-public class Client implements Facede{
+public class Client implements Facede {
+
     private Socket cliente;
-    private Socket comunicationSocket; 
+    private ComunicationSocket cs;
+
     /**
      *
      * @throws IOException
      */
     public Client() throws IOException {
         cliente = new Socket("localhost", 1050);
-        comunicationSocket = new ComunicationSocket(cliente);
+        cs = new ComunicationSocket(cliente);
     }
 
-    
-    
     public static void main(String[] args) throws IOException, InterruptedException {
         Client rc = new Client();
-        while(true) {
+        while (true) {
 //            rc.sms("ola ");
             Thread.sleep(1000l);
         }
@@ -47,72 +45,101 @@ public class Client implements Facede{
     }
 
     @Override
-    public void addObj() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean addUser(String username, String password) throws SimpleExecption {
+        cs.sendMessage(1, username, password);
+        return cs.readOK();
     }
 
     @Override
-    public void addTarefa() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean editUser(String username, String password) throws SimpleExecption {
+        cs.sendMessage(2, username, password);
+        return cs.readOK();
     }
 
     @Override
-    public void altObj() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String[] listUser(String username) throws SimpleExecption {
+        cs.sendMessage(3, username);
+        cs.readMessage();
+        return cs.popStringAll();
     }
 
     @Override
-    public void closeTarefa() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean addObj(String nome) throws SimpleExecption {
+        cs.sendMessage(4, nome);
+        return cs.readOK();
     }
 
     @Override
-    public void editTarefa() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean remObj(String nome) throws SimpleExecption {
+        cs.sendMessage(5, nome);
+        return cs.readOK();
     }
 
     @Override
-    public void editUser() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean supplyObj(String nome, int quantidade) throws SimpleExecption {
+        cs.sendMessage(6, nome, Integer.toString(quantidade));
+        return cs.readOK();
     }
 
     @Override
-    public void finishedTarefa() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String[] listObj() throws SimpleExecption {
+        cs.sendMessage(7);
+        return cs.popStringAll();
     }
 
     @Override
-    public void listObj() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean addTipoTarefa(String username, String tipoTarefa, String[] objetos) throws SimpleExecption {
+        cs.sendMessage(8, username, tipoTarefa, String.join("#", objetos));
+        return cs.readOK();
     }
 
     @Override
-    public void listTarefa() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean editTipoTarefa(String username, String tipoTarefa, String[] objetos) throws SimpleExecption {
+        cs.sendMessage(9, username, tipoTarefa, String.join("#", objetos));
+        return cs.readOK();
     }
 
     @Override
-    public void listUser() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean openTarefa(String username, String tipoTarefa) throws SimpleExecption {
+        cs.sendMessage(10, username, tipoTarefa);
+        return cs.readOK();
     }
 
     @Override
-    public void readyTarefa() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean closeTarefa(String username, String codTarefa) throws SimpleExecption {
+        cs.sendMessage(11, username, codTarefa);
+        return cs.readOK();
     }
 
     @Override
-    public void registarUser() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean statusTarefa(String username, String codTarefa) throws SimpleExecption {
+        cs.sendMessage(12, username, codTarefa);
+        return cs.readOK();
     }
 
     @Override
-    public void remObj() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean readyTarefa(String username, String codTarefa) throws SimpleExecption {
+        cs.sendMessage(13, username, codTarefa);
+        return cs.readOK();
     }
 
     @Override
-    public void statusTarefa() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Boolean finishedTarefa(String username, String codTarefa) throws SimpleExecption {
+        cs.sendMessage(14, username, codTarefa);
+        return cs.readOK();
+    }
+
+    @Override
+    public String[] listTarefa(String username) throws SimpleExecption {
+        cs.sendMessage(15, username);
+        cs.readMessage();
+        return cs.popStringAll();
+    }
+
+    @Override
+    public String[] listTipoTarefa(String username) throws SimpleExecption {
+        cs.sendMessage(16, username);
+        cs.readMessage();
+        return cs.popStringAll();
     }
 }

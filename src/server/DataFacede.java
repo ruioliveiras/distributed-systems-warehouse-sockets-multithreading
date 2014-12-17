@@ -3,81 +3,94 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package shared;
+package server;
+
+import shared.Facede;
+import shared.SimpleExecption;
 
 /**
  *
  * @author ruioliveiras
  */
-public class FacedeAction implements Facede{
+public class DataFacede implements Facede{
 
     @Override
-    public void addObj() {
+    public Boolean addUser(String username, String password) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void addTarefa() {
+    public Boolean editUser(String username, String password) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void altObj() {
+    public String[] listUser(String username) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void closeTarefa() {
+    public Boolean addObj(String nome) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editTarefa() {
+    public Boolean remObj(String nome) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void editUser() {
+    public Boolean supplyObj(String nome, int quantidade) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void finishedTarefa() {
+    public String[] listObj() throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void listObj() {
+    public Boolean addTipoTarefa(String user, String tipoTarefa, String[] objetos) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void listTarefa() {
+    public Boolean editTipoTarefa(String user, String tipoTarefa, String[] objetos) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void listUser() {
+    public Boolean openTarefa(String user, String tipoTarefa) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void readyTarefa() {
+    public Boolean closeTarefa(String user, String codTarefa) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void registarUser() {
+    public Boolean statusTarefa(String user, String codTarefa) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void remObj() {
+    public Boolean readyTarefa(String user, String codTarefa) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void statusTarefa() {
+    public Boolean finishedTarefa(String user, String codTarefa) throws SimpleExecption {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String[] listTarefa(String user) throws SimpleExecption {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String[] listTipoTarefa(String user) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
