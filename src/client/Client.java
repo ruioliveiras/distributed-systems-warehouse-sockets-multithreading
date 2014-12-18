@@ -142,4 +142,10 @@ public class Client implements Facede {
         cs.readMessage();
         return cs.popStringAll();
     }
+
+    @Override
+    public Boolean login(String username, String password) throws SimpleExecption {
+        cs.sendMessage(17, username);
+        return cs.readOK();
+    }
 }

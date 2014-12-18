@@ -14,6 +14,9 @@ package shared;
  */
 public interface Facede {
     
+    /*Authentication*/
+    public Boolean login(String username, String password) throws SimpleExecption;
+   
     /* FOR USER */
     public Boolean addUser(String username, String password) throws SimpleExecption;
    

@@ -5,6 +5,7 @@
  */
 package server;
 
+import client.InterfaceCliente;
 import java.util.Scanner;
 import shared.Facede;
 import shared.Menu;
@@ -16,6 +17,7 @@ import shared.Menu;
 public class InterfaceAdmin{
     
     protected  Menu menumain, menucliente, menuware, menuselected; 
+    protected Facede Facade = new DataFacede(); 
     
     protected InterfaceAdmin(){}   
     

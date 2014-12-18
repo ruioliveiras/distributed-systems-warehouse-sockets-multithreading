@@ -21,7 +21,7 @@ public class Tarefa
 
     public Tarefa()
     {
-        this.nome = "";
+        this.nome = ""; 
         this.itens = new HashMap<Item, Integer>();
     }
     

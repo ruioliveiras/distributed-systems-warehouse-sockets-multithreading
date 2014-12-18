@@ -93,5 +93,10 @@ public class DataFacede implements Facede{
     public String[] listTipoTarefa(String user) throws SimpleExecption {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Boolean login(String username, String password) throws SimpleExecption {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
