@@ -31,4 +31,5 @@ public class TarefaExecucao extends Tarefa
     public String getEstado(){ return this.estado; }
     
     public Tarefa getTarefa(){ return this.tarefa.clone(); }
+    
 }
