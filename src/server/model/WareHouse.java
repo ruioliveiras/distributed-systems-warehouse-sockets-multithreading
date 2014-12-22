@@ -50,10 +50,10 @@ public class WareHouse
     
     public void requisicao(Tarefa t)
     {
-        HashMap<Item, Integer> itens = t.getItens();
+        HashMap<Item, Integer> tarefas = t.getItens();
         Item aux;
         
-        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
+        for (Map.Entry<Item, Integer> entry : tarefas.entrySet()) 
         {
             hashLock.lock();
             try
