@@ -1,25 +1,29 @@
+package client;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server;
 
-import client.InterfaceCliente;
-import java.util.Scanner;
+
+import shared.Facede;
 import shared.Facede;
 import shared.Menu;
+import shared.Menu;
+
+import java.util.Scanner;
+
 /**
  *
  * @author Tomás Ferreira
  *
  */
-public class InterfaceAdmin{
+public class InterfaceCliente implements Facede {
+
+    public  Menu menumain, menucliente, menuware, menuselected; 
     
-    protected  Menu menumain, menucliente, menuware, menuselected; 
-    protected Facede Facade = new DataFacede(); 
-    
-    protected InterfaceAdmin(){}   
+    protected InterfaceCliente(){}   
     
     public void start() {
         
@@ -28,9 +32,9 @@ public class InterfaceAdmin{
         do {
             menumain.executa();
             switch (menumain.getOpcao()) {
-                case 1: menuClientes();
+                case 1: menuclientes();
                         break;
-                case 2: menuWarehouse();
+                case 2: menuwareh();
                         break;
             }
         } while (menumain.getOpcao()!=0);
@@ -65,24 +69,24 @@ public class InterfaceAdmin{
     }
     
     
-    protected  void menuClientes(){
+    protected  void menuclientes(){
         do {
             menucliente.executa();
             switch (menucliente.getOpcao()) {
-                case 1: addUser();
+                case 1: registarUser();
                         break;
                 case 2: editUser();
                         break;
                 case 3: listUser();
                         break;
-                case 4: menuSelectUser();
+                case 4: selectUser();
                         break;
             }
         } while (menucliente.getOpcao()!=0);
     }
     
     
-    protected  void menuWarehouse() {
+    protected  void menuwareh() {
         do {
             menuware.executa();
             switch (menuware.getOpcao()) {
@@ -97,9 +101,7 @@ public class InterfaceAdmin{
             }
         } while (menuware.getOpcao()!=0);
     }
-    
-     
-    private void menuSelectUser(){
+    public void selectUser(){
         Scanner is = new Scanner(System.in);
         
         System.out.print("Insira o nome do utilizador a consultar: ");
@@ -131,41 +133,90 @@ public class InterfaceAdmin{
         }
     }
     
-    private static boolean userExiste(){
+    public  boolean userExiste(){
         return true;
     }
+    
+    
+    public  void registarUser(){}
+    
+    
+    public  void editDB(){}
+    
+    
+    public  void listUser(){}
 
-    /* FOR USER */
-    public void addUser(){};
+      
+    public  void addTarefa(String user){}
+    
+    
+    public  void editTarefa(String user){}
+    
+    
+    public  void closeTarefa(String user){}
+    
+    
+    public  void statusTarefa(String user){}
+    
+    public  void readyTarefa(String user){}
    
-    public  void editUser(){};
+    public  void finishedTarefa(String user){}
+    
+    
+    public  void listTarefa(String user){}
+    
+    
+    public  void addObj(){}
+    
+    
+    public  void remObj(){}
+    
+    
+    public  void altObj(){}
+    
+    
+    public  void listObj(){}
 
-    public  void listUser(){};
-    
-    /*FOR WAREHOUSE*/
-    public  void addObj(){};
+    @Override
+    public void addTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-    public  void remObj(){};
+    @Override
+    public void closeTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-    public  void altObj(){};
+    @Override
+    public void editTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-    public  void listObj(){};
-    
-    /*FOR TAREFA*/
-    public void addTarefa(String user){}
-    
-    public void editTarefa(String user){}
-    
-    public void closeTarefa(String user){}
-    
-    public void statusTarefa(String user){}
-    
-    public void readyTarefa(String user){}
-   
-    public void finishedTarefa(String user){}
-     
-    public void listTarefa(String user){}
-    
+    @Override
+    public void editUser() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void finishedTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void listTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void readyTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void statusTarefa() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
 
 

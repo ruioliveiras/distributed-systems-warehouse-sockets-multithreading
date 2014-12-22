@@ -5,38 +5,32 @@
  */
 package server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
+import shared.ComunicationSocket;
+import shared.Facede;
+import shared.SimpleExecption;
 
 /**
  *
- * @author ruioliveiras
-s */
-public class ClientHandler implements Runnable{
+ * @author ruioliveiras s
+ */
+public class ClientHandler implements Runnable {
 
-    private Server parent;
-    private Socket socket;
-    private BufferedReader br;
-    private PrintWriter bw;
-    private String[] attrs;
-    
+    private final Socket socket;
+    private final Server parent;
+    private ComunicationSocket cs;
+    private Facede data;
+
     public ClientHandler(Server parent, Socket socket) throws IOException {
         this.parent = parent;
         this.socket = socket;
     }
-    
-    private void init() throws IOException{
-        InputStreamReader isr = new InputStreamReader(socket.getInputStream());
-        br = new BufferedReader(isr);
-        OutputStreamWriter osr=new OutputStreamWriter(socket.getOutputStream());
-        bw = new PrintWriter(osr);
+
+    private void init() throws IOException {
+        cs = new ComunicationSocket(socket);
     }
-    
-    
+
     @Override
     public void run() {
         try {
@@ -47,43 +41,66 @@ public class ClientHandler implements Runnable{
         //Loop while not EOF with switch case of commands
         //      for each case their will be a method defined in this class
         try {
-            boolean r;
-            do{
-                int messageCode = readMessage();
-                r = forwarder(messageCode);
-            }while(r);
+            do {
+                
+                int messageCode = cs.readMessage();
+                try{
+                    forwarder(messageCode);
+                }catch(SimpleExecption se){
+                    if (se.getLevel()> 1){
+                        response(false, se.getMessage());
+                    }else {
+                        throw se;
+                    }
+                }
+            } while (true);
         } catch (Exception e) {
             //error stop comunication
         }
     }
-    
-    private boolean forwarder(int messageCode) throws Exception{
-       
-        switch(messageCode){
-            case 1:
-               return false; //function for code 1;
-            case 2:
-               return false;//function for code 2;
-            case 3:
-               return false;//function for code 3;
-            default: 
-                return false;
+
+    private void forwarder(int messageCode) throws SimpleExecption {
+        switch (messageCode) {
+            case 1: response(data.addUser(cs.popString(), cs.popString()),"");
+                return ; //function for code 1;
+            case 2: response(data.editUser(cs.popString(), cs.popString()),"");
+                return ;//function for code 2;
+            case 3: response(data.listUser(cs.popString()),"");
+                return ;//function for code 3;
+            case 4: response(data.addObj(cs.popString()),"");
+                return;
+            case 5: response(data.remObj(cs.popString()),"");
+                return;
+            case 6: response(data.supplyObj(cs.popString(), cs.popInt()),"");
+                return;
+            case 7: response(data.listObj(),"");
+                return;
+            case 8: response(data.addTipoTarefa(cs.popString(), cs.popString(), cs.popArray("#")),"");
+                return;
+            case 9: response(data.editTipoTarefa(cs.popString(), cs.popString(), cs.popArray("#")),"");
+                return;
+            case 10: response(data.openTarefa(cs.popString(), cs.popString()),"");
+                return;
+            case 11: response(data.closeTarefa(cs.popString(), cs.popString()),"");
+                return;
+            case 12: response(data.statusTarefa(cs.popString(), cs.popString()),"");
+                return;
+            case 13: response(data.readyTarefa(cs.popString(), cs.popString()),"");
+                return;
+            case 14: response(data.finishedTarefa(cs.popString(), cs.popString()),"");
+                return;
+            case 15: response(data.listTarefa(cs.popString()),"");
+                return;
+            case 16: response(data.listTipoTarefa(cs.popString()),"");
+                return;
         }
     }
-    
-    private int readMessage() throws IOException, NumberFormatException{
-        String[] str = br.readLine().split(",");
-        int messageCode, size;
-        
-        messageCode = Integer.parseInt(str[0]);
-        size = Integer.parseInt(str[1]);
-        attrs = new String[size];
-        
-        for (int i = 0; i < size; i++) {
-            attrs[i] = str[i+2];
-        }
-        return messageCode;
+
+    public void response(Boolean a, String message){
+        cs.sendOK(a, message);
     }
-   
-    
+
+    public void response(String[] a, String message){
+        cs.sendOK(true, a);
+    }
 }

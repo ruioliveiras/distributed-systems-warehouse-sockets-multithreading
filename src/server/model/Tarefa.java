@@ -21,7 +21,7 @@ public class Tarefa
 
     public Tarefa()
     {
-        this.nome = "";
+        this.nome = ""; 
         this.itens = new HashMap<Item, Integer>();
     }
     
@@ -30,15 +30,6 @@ public class Tarefa
         this.nome = nome;
         this.itens = new HashMap<Item, Integer>();
     }
-    
-    public Tarefa(Tarefa f)
-    {
-        this.nome = f.getNome();
-        this.itens = f.getItens();
-    }
-    
-    public String getNome(){ return this.nome; }
-    public void setNome(String s) { this.nome = s; }
     
     public void addItem(Item it, int quant)
     {
@@ -49,13 +40,11 @@ public class Tarefa
     {
         HashMap<Item, Integer> ret = new HashMap<Item, Integer>();
         
-        for (Map.Entry<Item, Integer> entry : this.itens.entrySet()) 
+        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
         {
             ret.put(entry.getKey(), entry.getValue());      
         }
         
         return ret;
     }
-    
-    public Tarefa clone(){ return new Tarefa(this); }
 }
