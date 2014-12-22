@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package sdwarehouse;
+package server.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,10 +50,10 @@ public class WareHouse
     
     public void requisicao(Tarefa t)
     {
-        HashMap<Item, Integer> itens = t.getItens();
+        HashMap<Item, Integer> tarefas = t.getItens();
         Item aux;
         
-        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
+        for (Map.Entry<Item, Integer> entry : tarefas.entrySet()) 
         {
             hashLock.lock();
             try
@@ -71,13 +71,8 @@ public class WareHouse
         }
     }
     
-    public void devolver(Tarefa t)
+    public void devolver()
     {
-        HashMap<Item, Integer> itens = t.getItens();
         
-        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
-        {
-            this.supply(entry.getKey().getNome(), entry.getValue());
-        }
     }
 }

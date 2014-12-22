@@ -4,18 +4,18 @@
  * and open the template in the editor.
  */
 
-package sdwarehouse;
+package server;
 
+import server.model.WareHouse;
+import server.model.Cliente;
 import java.util.HashMap;
 
 /**
  *
  * @author Jose
  */
-public class Cliente 
+public class ServeState 
 {
-    private String nome, password;
-    private HashMap<String, Tarefa> tarefas;
-    private HashMap<String, TarefaExecucao> tarefasExec;
-    
+    private HashMap<String, Cliente> clientes;
+    private WareHouse armazem;
 }

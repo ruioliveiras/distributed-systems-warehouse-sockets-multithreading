@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package sdwarehouse;
+package server.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,17 +31,6 @@ public class Tarefa
         this.itens = new HashMap<Item, Integer>();
     }
     
-    public Tarefa(Tarefa f)
-    {
-        this.nome = f.getNome();
-        this.itens = f.getItens();
-    }
-    
-    public String getNome()
-    {
-        return this.nome;
-    }
-    
     public void addItem(Item it, int quant)
     {
         this.itens.put(it, quant);
@@ -57,10 +46,5 @@ public class Tarefa
         }
         
         return ret;
-    }
-    
-    public Tarefa clone()
-    {
-        return new Tarefa(this);
     }
 }
