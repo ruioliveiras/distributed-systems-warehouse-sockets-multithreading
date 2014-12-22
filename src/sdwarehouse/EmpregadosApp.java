@@ -9,6 +9,7 @@
 import server.Menu;
 import java.io.IOException;
 import java.util.Scanner;
+
 public class EmpregadosApp {}
     /*
     // Construtor privado (n�o queremos inst�ncias!...)

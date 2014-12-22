@@ -71,8 +71,13 @@ public class WareHouse
         }
     }
     
-    public void devolver()
+    public void devolver(Tarefa t)
     {
+        HashMap<Item, Integer> itens = t.getItens();
         
+        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
+        {
+            this.supply(entry.getKey().getNome(), entry.getValue());
+        }
     }
 }
