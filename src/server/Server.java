@@ -9,12 +9,16 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import shared.SimpleExecption;
+import shared.Interface;
 
 /**
  *
  * @author ruioliveiras
  */
-public class Server {
+public class Server implements Runnable{
     private ServerSocket ss;
     private Map<Integer,ClientHandler> requests;
     
@@ -33,9 +37,27 @@ public class Server {
         
     }
 
+    @Override
+    public void run() {
+        try {
+            this.start();
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     
     public static void main(String[] args) throws IOException {
         Server rs = new Server();
-        rs.start();
+        Thread t = new Thread(rs);
+        t.start();
+        Interface ui = new Interface(new DataFacede());
+        try {   
+            ui.start();
+        } catch (SimpleExecption e) {
+            System.out.println("Execption "+ e.getMessage() + " Server will stop");
+        }
     }
+
 }

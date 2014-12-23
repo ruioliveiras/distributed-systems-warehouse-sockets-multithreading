@@ -5,7 +5,7 @@
  */
 package server;
 
-import client.InterfaceCliente;
+import shared.Interface;
 import java.util.Scanner;
 import shared.Facede;
 import shared.Menu;
