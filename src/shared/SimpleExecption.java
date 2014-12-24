@@ -29,6 +29,13 @@ public class SimpleExecption extends Exception{
         this.simpleMessage = simpleMessage;
     }
 
+    @Override
+    public String getMessage() {
+        return "["+level+"|" + code + "]" + simpleMessage; 
+    }
+
+    
+    
     public String getSimpleMessage() {
         return simpleMessage;
     }

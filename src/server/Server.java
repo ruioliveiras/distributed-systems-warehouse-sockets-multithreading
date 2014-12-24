@@ -23,20 +23,26 @@ import shared.Interface;
 public class Server implements Runnable{
     private ServerSocket ss;
     private Map<Integer,ClientHandler> requests;
+    private Facede facade;
     
     
     public Server() throws IOException {
         ss = new ServerSocket(1050);
+        facade = new DataFacede();
     }
     
     public void start() throws IOException{
         while(true){
             Socket cn = ss.accept();
-            ClientHandler rn = new ClientHandler(Server.this, cn);
+            ClientHandler rn = new ClientHandler(Server.this, cn, facade);
             Thread t = new Thread(rn);           
             t.start();
         }
         
+    }
+
+    public Facede getFacade() {
+        return facade;
     }
 
     @Override
@@ -78,11 +84,10 @@ public class Server implements Runnable{
     
     public static void main(String[] args) throws IOException, SimpleExecption {
         final Server rs = new Server();
-        final DataFacede df = new DataFacede();
-        initFacade(df);
+        initFacade(rs.getFacade());
         Thread t = new Thread(rs);
         t.start();
-        Interface ui = new Interface(df);
+        Interface ui = new Interface(rs.getFacade());
         ui.start();
     }
 

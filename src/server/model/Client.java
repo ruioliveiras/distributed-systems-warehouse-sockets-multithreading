@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @author Jose
  */
-public class Cliente 
+public class Client 
 {
     private final ReentrantLock clientsLock = new ReentrantLock();
     private String nome, password;
@@ -21,7 +21,7 @@ public class Cliente
     private final HashMap<String, Tarefa> tarefasExec;
     private int tarefasExecCod;
     
-    public Cliente() {
+    public Client() {
         this.tarefasExecCod = 0;
         this.nome = "";
         this.password = "";
@@ -29,7 +29,7 @@ public class Cliente
         this.tarefasExec = new HashMap<>();
     }
     
-    public Cliente(String nome, String password) {
+    public Client(String nome, String password) {
         this.tarefasExecCod = 0;
         this.nome = nome;
         this.password = password;
@@ -57,8 +57,8 @@ public class Cliente
     public String[] getTarefas() {
         String[] t = new String[tarefasExec.size()];
         int i = 0;
-        for (TipoTarefa va : tarefasExec.values()) {
-            t[i++] = va.getNome();
+        for (Tarefa va : tarefasExec.values()) {
+            t[i++] = va.getCodigo();
         }
         return t;
     }
@@ -85,5 +85,9 @@ public class Cliente
         tarefasExec.put(t.getCodigo(), t);
         return t.getCodigo();
     }
+
+    public void remTarefa(String codTarefa) {
+        tarefasExec.remove(codTarefa);
+    }   
     
 }

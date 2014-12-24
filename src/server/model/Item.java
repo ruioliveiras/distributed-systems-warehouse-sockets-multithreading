@@ -20,7 +20,7 @@ public class Item {
     private String nome;
     private Lock l;
     private Condition nVazio;
-    private Condition mCondition;
+    private Condition conditon;
     private int cCounter;
     
     public Item(Condition condition){
@@ -29,7 +29,7 @@ public class Item {
         this.nome = "";
         this.l = new ReentrantLock();
         this.nVazio = l.newCondition();
-        this.mCondition = condition;
+        this.conditon = condition;
     }
     
     public Item(Condition condition, String nome, int quantidade){
@@ -38,7 +38,7 @@ public class Item {
         this.nome = nome;
         this.l = new ReentrantLock();
         this.nVazio = l.newCondition();
-        this.mCondition = condition;
+        this.conditon = condition;
     }
 
     public String getNome() {
@@ -54,7 +54,7 @@ public class Item {
         l.lock();
         try{
             this.quantidade += quantidade;
-            nVazio.signal();
+            conditon.signalAll();
         }
         finally{ l.unlock();}
     }
@@ -64,9 +64,8 @@ public class Item {
         cCounter++;
         do{
             snap = cCounter;
-            mCondition.await();
-        }while (snap > 0);
-
+            conditon.await();
+        }while (snap > 1);
         cCounter--;
     }
 

@@ -105,7 +105,7 @@ public interface Facede {
      * @return 
      * @throws SimpleExecption 
      */
-    public KeyValue<String[],Integer[]> listObj() throws SimpleExecption;
+    public Tuple<String[],Integer[]> listObj() throws SimpleExecption;
     
     /*FOR TAREFA*/
     

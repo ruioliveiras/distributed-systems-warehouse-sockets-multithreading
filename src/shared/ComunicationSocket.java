@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,8 +27,10 @@ public class ComunicationSocket {
     private PrintWriter bw;
     private String[] attrs;
     private int popIndex;
+    private final ComunicationSerializer serializer;
 
     public ComunicationSocket(Socket socket) throws IOException {
+        this.serializer = new ComunicationSerializer();
         this.socket = socket;
         InputStreamReader isr = new InputStreamReader(socket.getInputStream());
         br = new BufferedReader(isr);
@@ -35,19 +39,27 @@ public class ComunicationSocket {
         bw = new PrintWriter(osr);
     }
 
-    public void sendMessage(int messageCode, String... attrs) {
+    public <T> void sendMessage(int messageCode, T... attrs) throws SimpleExecption {
         bw.print(messageCode + "," + attrs.length + ",");
-        for (String attr : attrs) {
-            bw.print(attr + ",");
+        for (T attr : attrs) {
+            bw.print(serializer.serialize(attr) + ",");
         }
         bw.println("");
         bw.flush();
     }
 
+    
     public int readMessage() throws SimpleExecption {
         String[] str;
         try {
-            str = br.readLine().split(",");
+            String aux = br.readLine();
+            if (aux == null){
+                //comunication ended;
+                socket.shutdownOutput(); 
+                socket.shutdownInput();
+                return -1;
+            }
+            str = aux.split(",");
 
             int messageCode, size;
 
@@ -55,7 +67,7 @@ public class ComunicationSocket {
             size = Integer.parseInt(str[1]);
             attrs = new String[size];
 
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < size && i + 2 < str.length; i++) {
                 attrs[i] = str[i + 2];
             }
             popIndex = 0;
@@ -65,111 +77,34 @@ public class ComunicationSocket {
             throw new SimpleExecption(1, "SOCKET", "error while reading");
         }
     }
-    /* Serialização:
-     , separa argumentos
-     # representa um array (um unico argumento);
-     $ reppresenta um par key$values
-     */
-
-    public String serialize(Object a) {
-        return a.toString();
-    }
-
-    public String serialize(Object[] a) {
-        String ret = "";
-        int i;
-        for (i = 0; i < a.length - 1; i++) {
-            ret += serialize(a[i]) + "#";
-        }
-        if (i < a.length) {
-            ret += serialize(a[i]);
-        }
-        return ret;
-    }
-
-    public void sendOK(boolean isOk, String message) {
+    
+    public <T> void sendOK(boolean isOk, T message) throws SimpleExecption {
         String sIsOk = (isOk) ? "OK" : "NOTOK";
-        sendMessage(-1, "OK", message);
-    }
-
-    public void sendOK(boolean isOk, Object message) {
-        String sIsOk = (isOk) ? "OK" : "NOTOK";
-        sendMessage(-1, "OK", serialize(message));
-    }
-
-    public void sendOK(boolean isOk, Object message, Object message2) {
-        String sIsOk = (isOk) ? "OK" : "NOTOK";
-        sendMessage(-1, "OK", serialize(message), serialize(message2));
+        sendMessage(-1, sIsOk, serializer.serialize(message));
     }
 
     public boolean readOK() throws SimpleExecption {
-        try {
-            readMessage();
-            String sIsOk = popString();
-            if (sIsOk.equals("OK")) {
-                return true;
-            } else {
-                throw new SimpleExecption(3, "SOCKET", popString());
-            }
-        } catch (Exception ex) {
-            throw new SimpleExecption(1, "SOCKET", "error while reading OK message");
+//        try {
+        readMessage();
+        String sIsOk = pop("String");
+        if (sIsOk.equals("OK")) {
+            return true;
+        } else {
+            throw new SimpleExecption(3, "SOCKET", pop("String"));
         }
+//        } catch (Exception ex) {
+//            throw new SimpleExecption(1, "SOCKET", "error while reading OK message");
+//        }
     }
 
-    public void sendSimple(boolean isOk, String message) {
-        String sIsOk = (isOk) ? "OK" : "NOTOK";
-        sendMessage(-1, "OK", message);
-    }
-
-    public int getInt(int i) throws SimpleExecption {
-        try {
-            return Integer.parseInt(attrs[i]);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new SimpleExecption(2, "SOCKET", "getInt out of bounds");
-        } catch (NumberFormatException e) {
-            throw new SimpleExecption(2, "SOCKET", "GetInt but isn't int");
+    public <T> T get(int index, T t) throws SimpleExecption {
+        if (index < attrs.length && index >= 0){
+            return serializer.descerialize(attrs[index], t);
         }
+        throw  new SimpleExecption(1, "SOCKET", "Invalid number arguments: " + index);
     }
-
-    public String getString(int i) throws SimpleExecption {
-        try {
-            return attrs[i];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new SimpleExecption(2, "SOCKET", "GetString out of bounds");
-        }
-    }
-
-    public int popInt() throws SimpleExecption {
-        return getInt(popIndex++);
-    }
-
-    public String popString() throws SimpleExecption {
-        return getString(popIndex++);
-    }
-
-    public String[] popStringAll() throws SimpleExecption {
-        String[] res = new String[attrs.length - popIndex];
-        for (int i = 0; i < attrs.length - attrs.length; i++) {
-            res[i] = attrs[i + attrs.length];
-        }
-        return res;
-    }
-
-    public String[] popArray(String delimiter) throws SimpleExecption {
-        String s = popString();
-        return s.split(delimiter);
-    }
-
-    public Integer[] popArrayInt(String delimiter) throws SimpleExecption {
-        String[] s = popArray(delimiter);
-        Integer[] in = new Integer[s.length];
-        for (int i = 0; i < s.length; i++) {
-            try {
-                in[i] = Integer.parseInt(s[i]);
-            } catch (NumberFormatException e) {
-                throw new SimpleExecption(2, "SOCKET", "GetInt but isn't int");
-            }
-        }
-        return in;
+    
+    public <T> T pop(T t) throws SimpleExecption {
+       return get(popIndex++, t);
     }
 }

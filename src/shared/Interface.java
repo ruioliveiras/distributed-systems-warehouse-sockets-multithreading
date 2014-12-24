@@ -9,7 +9,7 @@ package shared;
 
 import shared.Facede;   
 import shared.Menu;
-import server.model.Cliente;
+import server.model.Client;
 
 import java.util.Scanner;
 import shared.SimpleExecption;
@@ -94,7 +94,7 @@ public class Interface {///implements Facede{
         System.out.print("Password: ");
         pass = is.nextLine();
         
-        Cliente novo = new Cliente(usern, pass);  
+        Client novo = new Client(usern, pass);  
         
         f.addUser(usern, pass);
     }
@@ -363,12 +363,12 @@ public class Interface {///implements Facede{
     
      
     public void clistObj() throws SimpleExecption {
-        KeyValue<String[], Integer[]> objetos = f.listObj();
+        Tuple<String[], Integer[]> objetos = f.listObj();
         
         System.out.println("Lista de objetos no armazem:");
-        for (int i = 0; i < objetos.getKey().length; i++) {
-            System.out.println(objetos.getKey()[i] + " - "
-                    + objetos.getValue()[i]
+        for (int i = 0; i < objetos.getA().length; i++) {
+            System.out.println(objetos.getA()[i] + " - "
+                    + objetos.getB()[i]
             );
         }
     } 

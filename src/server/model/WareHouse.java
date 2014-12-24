@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-import shared.KeyValue;
+import shared.Tuple;
 
 /**
  *
@@ -18,7 +18,7 @@ import shared.KeyValue;
  */
 public class WareHouse 
 {   
-    private final HashMap<String, Cliente> clientes;
+    private final HashMap<String, Client> clientes;
     private final HashMap<String, Item> armazem;
     private final ReentrantLock clientsLock;
     private final ReentrantLock armazemLock;
@@ -58,13 +58,14 @@ public class WareHouse
         HashMap<String, Integer> itens = t.getItens();
         armazemLock.lock();
         try{
-            boolean needToRepeat = false;
+            boolean needToRepeat = true;
             while(needToRepeat){
+                needToRepeat = false;
                 for (Map.Entry<String, Integer> entry : itens.entrySet()) {   
                     String itemName = entry.getKey();
                     Item item = getOrCreate(itemName);
-                    if (item.getQuantidade() <= 0 ){
-                        while(item.getQuantidade()<= 0) { 
+                    if (item.getQuantidade() <= entry.getValue() ){
+                        while(item.getQuantidade()<= entry.getValue()) { 
                             item.myWait();
                         }
                         needToRepeat = true;
@@ -95,7 +96,7 @@ public class WareHouse
         }
     }
  
-    public KeyValue<String[],Integer[]> getAllObj() {
+    public Tuple<String[],Integer[]> getAllObj() {
         String[] values = new String[armazem.size()];
         Integer[] quats = new Integer[armazem.size()];
         int i = 0;
@@ -104,7 +105,7 @@ public class WareHouse
             quats[i] = va.getQuantidade();
             i++;
         }
-        return new KeyValue<>(values,quats);
+        return new Tuple<>(values,quats);
     }
 
     public Item[] getItems(String[] objs) {

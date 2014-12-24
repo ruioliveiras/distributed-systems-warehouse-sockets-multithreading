@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.Socket;
 import shared.ComunicationSocket;
 import shared.Facede;
-import shared.KeyValue;
+import shared.Tuple;
 import shared.SimpleExecption;
 
 /**
@@ -23,8 +23,9 @@ public class ClientHandler implements Runnable {
     private ComunicationSocket cs;
     private Facede data;
 
-    public ClientHandler(Server parent, Socket socket) throws IOException {
+    public ClientHandler(Server parent, Socket socket, Facede facade) throws IOException {
         this.parent = parent;
+        this.data = facade;
         this.socket = socket;
     }
 
@@ -41,10 +42,12 @@ public class ClientHandler implements Runnable {
         }
         //Loop while not EOF with switch case of commands
         //      for each case their will be a method defined in this class
+        
+        int messageCode = -500;
         try {
             do {
                 
-                int messageCode = cs.readMessage();
+                messageCode = cs.readMessage();
                 try{
                     forwarder(messageCode);
                 }catch(SimpleExecption se){
@@ -55,63 +58,61 @@ public class ClientHandler implements Runnable {
                     }
                 }
             } while (true);
-        } catch (Exception e) {
-            //error stop comunication
+        } catch (SimpleExecption e) {
+           System.err.println(messageCode+ " - "+e.getMessage());
         }
     }
 
     private void forwarder(int messageCode) throws SimpleExecption {
+        String str = "string";
+        Integer i = 1;
+        Integer[] iArray = {1};
+        String[] strArray = {"a"};
+        
         switch (messageCode) {
-            case 1: response(data.addUser(cs.popString(), cs.popString()),"");
+            case 1: response(data.addUser(cs.pop(str), cs.pop(str)),"");
                 return ; //function for code 1;
             case 2:// response(data.editUser(cs.popString(), cs.popString()),"");
-                return ;//function for code 2;
-            case 3: response(data.listUser(cs.popString()),"");
+                break ;//function for code 2;
+            case 3: response(data.listUser(cs.pop(str)),"");
                 return ;//function for code 3;
             case 4:// response(data.addObj(cs.popString()),"");
-                return;
+                break;
             case 5:// response(data.remObj(cs.popString()),"");
+                break;
+            case 6: response(data.supplyObj(cs.pop(str), cs.pop(i)),"");
                 return;
-            case 6: response(data.supplyObj(cs.popString(), cs.popInt()),"");
+            case 7: response(data.listObj(),"");
                 return;
-            case 7: KeyValue<String[],Integer[]> a = data.listObj();
-                response(a.getKey(), a.getValue(),"");
-                return;
-            case 8: response(data.addTipoTarefa(cs.popString(), cs.popString(), cs.popArray("#"), cs.popArrayInt("#") ),"");
+            case 8: response(data.addTipoTarefa(cs.pop(str), cs.pop(str), cs.pop(strArray), cs.pop(iArray)),"");
                 return;
             case 9:// response(data.editTipoTarefa(cs.popString(), cs.popString(), cs.popArray("#"), cs.popArrayInt("#")),"");
                 return;
-            case 10: response(data.openTarefa(cs.popString(), cs.popString()),"");
+            case 10: response(data.openTarefa(cs.pop(str), cs.pop(str)),"");
                 return;
-            case 11: response(data.closeTarefa(cs.popString(), cs.popString()),"");
+            case 11: response(data.closeTarefa(cs.pop(str), cs.pop(str)),"");
                 return;
-            case 12: response(data.statusTarefa(cs.popString(), cs.popString()),"");
+            case 12: response(data.statusTarefa(cs.pop(str), cs.pop(str)),"");
                 return;
-            case 13: response(data.readyTarefa(cs.popString(), cs.popString()),"");
+            case 13: response(data.readyTarefa(cs.pop(str), cs.pop(str)),"");
                 return;
-            case 14: response(data.finishedTarefa(cs.popString(), cs.popString()),"");
+            case 14: response(data.finishedTarefa(cs.pop(str), cs.pop(str)),"");
                 return;
-            case 15: response(data.listTarefa(cs.popString()),"");
+            case 15: response(data.listTarefa(cs.pop(str)),"");
                 return;
-            case 16: response(data.listTipoTarefa(cs.popString()),"");
+            case 16: response(data.listTipoTarefa(cs.pop(str)),"");
+                return;
+            case 17: response(data.login(cs.pop(str),cs.pop(str)),"");
                 return;
         }
+        throw new SimpleExecption(1, "ClienHANDLER", "Invalid message code" + messageCode);
     }
 
-    public void response(Boolean a, String message){
+    public void response(Boolean a, String message) throws SimpleExecption{
         cs.sendOK(a, message);
     }
-   
-    public void response(String a, String message){
+    
+    public <T> void response(T a, String message) throws SimpleExecption{
         cs.sendOK(true, a);
     }
-    
-    public void response(String[] a, String message){
-        cs.sendOK(true, a);
-    }
-    
-    public void response(String[] a, Integer[] b , String message){
-        cs.sendOK(true, a, b);
-    }
-    
 }
