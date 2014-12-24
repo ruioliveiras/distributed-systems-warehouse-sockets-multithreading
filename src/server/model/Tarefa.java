@@ -3,48 +3,41 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package server.model;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
  * @author Jose
  */
-public class Tarefa 
-{
-    private String nome;
-    private HashMap<Item, Integer> itens;
+public class Tarefa extends TipoTarefa {
 
-    public Tarefa()
-    {
-        this.nome = ""; 
-        this.itens = new HashMap<Item, Integer>();
+    private String estado;
+    private String codigo;
+
+    public Tarefa() {
+        super();
+
     }
-    
-    public Tarefa(String nome)
-    {
-        this.nome = nome;
-        this.itens = new HashMap<Item, Integer>();
+
+    public Tarefa(TipoTarefa f) {
+        super(f);
+        this.estado = "waiting";
     }
-    
-    public void addItem(Item it, int quant)
-    {
-        this.itens.put(it, quant);
+
+    public void setEstado(String s) {
+        this.estado = s;
     }
-    
-    public HashMap<Item, Integer> getItens()
-    {
-        HashMap<Item, Integer> ret = new HashMap<Item, Integer>();
-        
-        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
-        {
-            ret.put(entry.getKey(), entry.getValue());      
-        }
-        
-        return ret;
+
+    public String getEstado() {
+        return this.estado;
     }
+
+    public void setCodigo(String string) {
+        this.codigo = string;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
 }

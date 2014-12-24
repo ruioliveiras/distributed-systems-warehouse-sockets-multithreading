@@ -5,6 +5,8 @@
  */
 package shared;
 
+import java.util.Map;
+
 /** O objectivo desta interface é definir o que uma UI pode precisar para
  * imprimir ao longo da sua execução
  * Dai tentar retornar sempre tipos simples.
@@ -41,7 +43,7 @@ public interface Facede {
      * @return return true if succes, false if it is not
      * @throws SimpleExecption 
      */
-    public Boolean editUser(String username, String password) throws SimpleExecption;
+   // public Boolean editUser(String username, String password) throws SimpleExecption;
     
     /**
      * Return 
@@ -51,6 +53,27 @@ public interface Facede {
      */
     public String[] listUser(String username) throws SimpleExecption;
     
+    
+    /** Add new tipoTarefa for an existent user;
+     * 
+     * @param user the identifier of the user
+     * @param tipoTarefa the identifier of the tipoTarefa
+     * @param objetos The objects and his quanties  
+     * @param quants  
+     * @return
+     * @throws SimpleExecption 
+     */
+    public Boolean addTipoTarefa(String user, String tipoTarefa, String objetos[], Integer quants[]) throws SimpleExecption;
+    
+    /** Get The list of Tarefas of an User;
+     * 
+     * @param user
+     * @return
+     * @throws SimpleExecption 
+     */
+    public String[] listTipoTarefa(String user) throws SimpleExecption;
+    
+    
     /*FOR WAREHOUSE*/
     /**
      * Create new Object with Zero quantiy
@@ -58,7 +81,7 @@ public interface Facede {
      * @return Success boolean
      * @throws SimpleExecption 
      */
-    public Boolean addObj(String nome) throws SimpleExecption;
+    //public Boolean addObj(String nome) throws SimpleExecption;
 
     /**
      * Delete an Object
@@ -66,7 +89,7 @@ public interface Facede {
      * @return Success boolean
      * @throws SimpleExecption 
      */
-    public Boolean remObj(String nome) throws SimpleExecption;
+    //public Boolean remObj(String nome) throws SimpleExecption;
 
     /**
      * Add more items 
@@ -77,24 +100,87 @@ public interface Facede {
      */
     public Boolean supplyObj(String nome, int quantidade) throws SimpleExecption;
 
-    public String[] listObj() throws SimpleExecption;
+    /**
+     * Get all systems Objets with his actual quanty
+     * @return 
+     * @throws SimpleExecption 
+     */
+    public KeyValue<String[],Integer[]> listObj() throws SimpleExecption;
     
     /*FOR TAREFA*/
-    public Boolean addTipoTarefa(String user, String tipoTarefa, String objetos[]) throws SimpleExecption;
     
-    public Boolean editTipoTarefa(String user, String tipoTarefa, String objetos[]) throws SimpleExecption;
+    /** Edit new tipoTarefa for an existent user;
+     * (Same as addTipoTarefa)
+     * @param user
+     * @param tipoTarefa
+     * @param objetos
+     * @param quants
+     * @return
+     * @throws SimpleExecption 
+     */
+    //public Boolean editTipoTarefa(String user, String tipoTarefa, String objetos[], Integer quants[]) throws SimpleExecption;
+
+
     
-    public Boolean openTarefa(String user, String tipoTarefa) throws SimpleExecption;
-    
+    /** Ask to open a new Tarefa, that returns a codTarefa.
+     * 
+     * @param user
+     * @param tipoTarefa
+     * @return codTarefa
+     * @throws SimpleExecption 
+     */
+    public String openTarefa(String user, String tipoTarefa) throws SimpleExecption;
+
+    /** Close a previous opened Tarefa.
+     * 
+     * @param user
+     * @param codTarefa
+     * @return
+     * @throws SimpleExecption 
+     */
     public Boolean closeTarefa(String user, String codTarefa) throws SimpleExecption;
     
-    public Boolean statusTarefa(String user, String codTarefa) throws SimpleExecption;
+    /** Check the status of an Opened Tarefa
+     * 
+     * @param user
+     * @param codTarefa
+     * @return
+     * @throws SimpleExecption 
+     */
+    public String statusTarefa(String user, String codTarefa) throws SimpleExecption;
     
+    /** Ask the server to be notify when the Opened Tarefa is Ready to Work
+     * 
+     * @param user
+     * @param codTarefa
+     * @return
+     * @throws SimpleExecption 
+     */
     public Boolean readyTarefa(String user,  String codTarefa) throws SimpleExecption;
     
+    /** Ask the server to be notify when some Tarefa be closed.
+     * 
+     * @param user
+     * @param codTarefa
+     * @return
+     * @throws SimpleExecption 
+     */
     public Boolean finishedTarefa(String user,  String codTarefa) throws SimpleExecption;
      
+    /** Get the list of opened Tarefas of an user;
+     * 
+     * @param user
+     * @return
+     * @throws SimpleExecption 
+     */
     public String[] listTarefa(String user) throws SimpleExecption;
     
-    public String[] listTipoTarefa(String user) throws SimpleExecption;
+    /**
+     * Get the list of opened Tarefas all the users
+     * 
+     * @param user
+     * @return
+     * @throws SimpleExecption 
+     */
+    public String[][] listAllTarefa(String user) throws SimpleExecption;
 }

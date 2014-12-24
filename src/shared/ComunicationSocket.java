@@ -65,17 +65,43 @@ public class ComunicationSocket {
             throw new SimpleExecption(1, "SOCKET", "error while reading");
         }
     }
+    /* Serialização:
+     , separa argumentos
+     # representa um array (um unico argumento);
+     $ reppresenta um par key$values
+     */
+
+    public String serialize(Object a) {
+        return a.toString();
+    }
+
+    public String serialize(Object[] a) {
+        String ret = "";
+        int i;
+        for (i = 0; i < a.length - 1; i++) {
+            ret += serialize(a[i]) + "#";
+        }
+        if (i < a.length) {
+            ret += serialize(a[i]);
+        }
+        return ret;
+    }
 
     public void sendOK(boolean isOk, String message) {
         String sIsOk = (isOk) ? "OK" : "NOTOK";
         sendMessage(-1, "OK", message);
     }
-    
-    public void sendOK(boolean isOk, String[] message) {
+
+    public void sendOK(boolean isOk, Object message) {
         String sIsOk = (isOk) ? "OK" : "NOTOK";
-        sendMessage(-1, "OK", String.join("#", message));
+        sendMessage(-1, "OK", serialize(message));
     }
-    
+
+    public void sendOK(boolean isOk, Object message, Object message2) {
+        String sIsOk = (isOk) ? "OK" : "NOTOK";
+        sendMessage(-1, "OK", serialize(message), serialize(message2));
+    }
+
     public boolean readOK() throws SimpleExecption {
         try {
             readMessage();
@@ -94,22 +120,22 @@ public class ComunicationSocket {
         String sIsOk = (isOk) ? "OK" : "NOTOK";
         sendMessage(-1, "OK", message);
     }
-    
+
     public int getInt(int i) throws SimpleExecption {
-        try{
+        try {
             return Integer.parseInt(attrs[i]);
-        }catch(ArrayIndexOutOfBoundsException e){
-            throw new SimpleExecption(2, "SOCKET", "getInt out of bounds" );
-        }catch(NumberFormatException e){
-            throw new SimpleExecption(2, "SOCKET", "GetInt but isn't int" );
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new SimpleExecption(2, "SOCKET", "getInt out of bounds");
+        } catch (NumberFormatException e) {
+            throw new SimpleExecption(2, "SOCKET", "GetInt but isn't int");
         }
     }
 
     public String getString(int i) throws SimpleExecption {
-        try{
+        try {
             return attrs[i];
-        }catch(ArrayIndexOutOfBoundsException e){
-            throw new SimpleExecption(2, "SOCKET", "GetString out of bounds" );
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new SimpleExecption(2, "SOCKET", "GetString out of bounds");
         }
     }
 
@@ -132,5 +158,18 @@ public class ComunicationSocket {
     public String[] popArray(String delimiter) throws SimpleExecption {
         String s = popString();
         return s.split(delimiter);
+    }
+
+    public Integer[] popArrayInt(String delimiter) throws SimpleExecption {
+        String[] s = popArray(delimiter);
+        Integer[] in = new Integer[s.length];
+        for (int i = 0; i < s.length; i++) {
+            try {
+                in[i] = Integer.parseInt(s[i]);
+            } catch (NumberFormatException e) {
+                throw new SimpleExecption(2, "SOCKET", "GetInt but isn't int");
+            }
+        }
+        return in;
     }
 }

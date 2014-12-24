@@ -10,74 +10,120 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import shared.KeyValue;
 
 /**
  *
  * @author Jose
  */
 public class WareHouse 
-{
-    private HashMap<String, Item> armazem;
-    private ReentrantLock hashLock;
+{   
+    private final HashMap<String, Cliente> clientes;
+    private final HashMap<String, Item> armazem;
+    private final ReentrantLock clientsLock;
+    private final ReentrantLock armazemLock;
     private Condition cond;
+    
     
     public WareHouse()
     {
-        this.armazem = new HashMap<String, Item>();
-        this.hashLock = new ReentrantLock();
-        cond = hashLock.newCondition();
+        this.armazem = new HashMap<>();
+        this.clientes = new HashMap<>();
+        this.armazemLock = new ReentrantLock();
+        this.clientsLock = new ReentrantLock();
+        cond = armazemLock.newCondition();
     }
     
+    private Item getOrCreate(String nome){
+        Item item = armazem.get(nome);
+        if (item == null) {
+            item = new Item(armazemLock.newCondition(), nome, 0);
+            armazem.put(nome, item);
+        }
+        return item;
+    }
     
     public void supply(String nome, int quant)
     {
-        hashLock.lock();
-        
+        armazemLock.lock();
         try
         {
-            if(armazem.containsKey(nome))
-            {
-                Item aux = armazem.get(nome);
-                hashLock.unlock();
-                aux.add(quant);
-            }
-            else
-            {
-                armazem.put(nome, new Item(nome, quant));
-            }
-        }finally{ hashLock.unlock(); }
+            Item it = getOrCreate(nome);
+            it.add(quant);
+        }finally{ armazemLock.unlock(); }
     }
-    
-    public void requisicao(Tarefa t)
-    {
-        HashMap<Item, Integer> itens = t.getItens();
-        Item aux;
-        
-        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
-        {
-            hashLock.lock();
-            try
-            {
-                if( armazem.containsKey(entry.getKey().getNome()) )
-                    aux = armazem.get(entry.getKey().getNome());
-                else
-                {
-                    armazem.put( entry.getKey().getNome(), new Item(entry.getKey().getNome(), 0) );
-                    aux = armazem.get(entry.getKey().getNome());
+       
+    public void want(Tarefa t) throws InterruptedException {
+        //Item[] ps = new Item[t.];
+        HashMap<String, Integer> itens = t.getItens();
+        armazemLock.lock();
+        try{
+            boolean needToRepeat = false;
+            while(needToRepeat){
+                for (Map.Entry<String, Integer> entry : itens.entrySet()) {   
+                    String itemName = entry.getKey();
+                    Item item = getOrCreate(itemName);
+                    if (item.getQuantidade() <= 0 ){
+                        while(item.getQuantidade()<= 0) { 
+                            item.myWait();
+                        }
+                        needToRepeat = true;
+                        break;
+                    }
                 }
-            }finally{ hashLock.unlock(); }
+            }
             
-            aux.retrieve(entry.getValue());
+            // if it are there then is have run all the array and 
+            
+            for (Map.Entry<String, Integer> entry : itens.entrySet()) {   
+                Item item = armazem.get(entry.getKey());
+                item.retrieve(entry.getValue());
+            }
+            t.setEstado("working");
+        } finally {
+            armazemLock.unlock();
         }
     }
     
-    public void devolver(Tarefa t)
+    public void dontWantMore(Tarefa t)
     {
-        HashMap<Item, Integer> itens = t.getItens();
+        HashMap<String, Integer> itens = t.getItens();
         
-        for (Map.Entry<Item, Integer> entry : itens.entrySet()) 
+        for (Map.Entry<String, Integer> entry : itens.entrySet()) 
         {
-            this.supply(entry.getKey().getNome(), entry.getValue());
+            this.supply(entry.getKey(), entry.getValue());
         }
     }
+ 
+    public KeyValue<String[],Integer[]> getAllObj() {
+        String[] values = new String[armazem.size()];
+        Integer[] quats = new Integer[armazem.size()];
+        int i = 0;
+        for (Item va : armazem.values()) {
+            values[i] = va.getNome();
+            quats[i] = va.getQuantidade();
+            i++;
+        }
+        return new KeyValue<>(values,quats);
+    }
+
+    public Item[] getItems(String[] objs) {
+        clientsLock.lock();
+        try {
+            Item[] res = new Item[objs.length];
+            int i = 0;
+            for (String obj : objs) {
+                res[i] = armazem.get(obj);
+                if (res[i] == null){
+                    res[i] = new Item(armazemLock.newCondition(),obj, 0);
+                    armazem.put(obj, res[i]);
+                }
+                i++;
+            }
+            return res;
+        } finally {
+            clientsLock.unlock();
+        }
+    }
+
 }

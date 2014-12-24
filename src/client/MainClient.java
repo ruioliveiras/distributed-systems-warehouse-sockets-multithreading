@@ -17,13 +17,13 @@ import shared.Interface;
  */
 public class MainClient {
     
-    public static void main(String[] args) throws IOException {
-        Client c = new Client();
-        Interface ui = new Interface(c);
-        try {
-            ui.start();
-        } catch (SimpleExecption ex) {
-            Logger.getLogger(MainClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    public static void main(String[] args) throws IOException {
+//        Client c = new Client();
+//        Interface ui = new Interface(c);
+//        try {
+//            ui.start();
+//        } catch (SimpleExecption ex) {
+//            Logger.getLogger(MainClient.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 }

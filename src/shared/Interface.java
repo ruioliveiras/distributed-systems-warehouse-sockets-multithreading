@@ -7,7 +7,7 @@ package shared;
  */
 
 
-import shared.Facede;
+import shared.Facede;   
 import shared.Menu;
 import server.model.Cliente;
 
@@ -29,16 +29,20 @@ public class Interface {///implements Facede{
         this.f = f;
     }
     
-    public void start() throws SimpleExecption {
+    public void start(){
         carregarMenus();
         
         do {
-            menulogreg.executa();
-            switch (menulogreg.getOpcao()) {
-                case 1: login();
-                        break;
-                case 2: registar();
-                        break;
+            try{
+                menulogreg.executa();
+                switch (menulogreg.getOpcao()) {
+                    case 1: login();
+                            break;
+                    case 2: registar();
+                            break;
+                }
+            }catch(SimpleExecption s){
+                System.err.println(s.getMessage());
             }
         } while (menulogreg.getOpcao()!=0);
     }
@@ -56,12 +60,17 @@ public class Interface {///implements Facede{
         } while(!f.login(user, pass));
         
         do {
-            menumain.executa();
-            switch (menumain.getOpcao()) {
-                case 1: menuuser(user);
-                        break;
-                case 2: menuwareh();
-                        break;
+            try{
+                menumain.executa();
+                switch (menumain.getOpcao()) {
+                    case 1: menuuser(user);
+                            break;
+                    case 2: menuwareh();
+                            break;
+                }
+
+            }catch(SimpleExecption s){
+                System.err.println(s.getMessage());
             }
         } while (menumain.getOpcao()!=0);
     }
@@ -95,26 +104,28 @@ public class Interface {///implements Facede{
     String[] ops = {"Menu Cliente",
                     "Menu WareHouse"};
     
-    String[] logreg = {"Login",
-                       "Registar"};
+    String[] logreg = {"Login", //login
+                       "Registar"}; //addUser
     
-    String [] opsclient = {"Registar Utilizador",
-                           "Alterar Dados de Utilizador",
-                           "Lista de Utilizadores",
-                           "Menu de Utilizador"};
+    String [] opsclient = {"Registar Utilizador", //addUser
+                           "Remover Utilizador", // Nops
+                           "Lista de Utilizadores", //listUser
+                           "Menu de Utilizador"}; 
     
-    String [] opsclienteSelect = {"Criar Tarefa",
-                                  "Alterar Tarefa",
-                                  "Terminar Tarefa",
-                                  "Consultar Estado de Tarefa",
-                                  "Requesitar Notificacao de Tarefa Pronta a ser Executada",
-                                  "Requesitar Notificacao de Conclusao de Tarefa",
-                                  "Lista de Tarefas"};
+    String [] opsclienteSelect = {"Criar TipoTarefa", //addTipoTarefa
+                                  "lista TipoTarefas", 
+                                  "Iniciar Tarefa",  //openTarefa
+                                  "Terminar Tarefa", //closeTarefa
+                                  "Consultar Estado de Tarefa",//statusTarefa
+                                  "Requesitar Notificacao de Tarefa Pronta a ser Executada", //readyTarefa
+                                  "Requesitar Notificacao de Conclusao de Tarefa", //finishedTarefa
+                                  "Listar as minhas de Tarefas", //listTarefa
+                                  "Listar as tarefas de todos"};//listAllTarefa
 
-    String [] opsware = {"Adicionar Objeto",
-                         "Retirar Objeto",
-                         "Alterar Quantidade de Objeto",
-                         "Lista de Objetos"};
+    String [] opsware = {//"Adicionar Objeto", //supplyObj
+                         //"Retirar Objeto", //
+                         "Adicionar Quantidade de Objeto", //supplyObj
+                         "Lista de Objetos"};// listObj
     
     menumain = new Menu(ops);
     menucliente = new Menu(opsclient);
@@ -145,14 +156,14 @@ public class Interface {///implements Facede{
         do {
             menuware.executa();
             switch (menuware.getOpcao()) {
-                case 1: caddObj();
+                case 1: caltObj();
                         break;
-                case 2: cremObj();
+                case 2: clistObj();
                         break;
-                case 3: caltObj();
-                        break;
-                case 4: clistObj();
-                        break;
+//                case 3: caltObj();
+//                        break;
+//                case 4: clistObj();
+//                        break;
             }
         } while (menuware.getOpcao()!=0);
     }
@@ -177,24 +188,26 @@ public class Interface {///implements Facede{
         do {
             menuselected.executa();
             switch (menuselected.getOpcao()) {
-                case 1: caddTarefa(user);
+                case 1: caddTipoTarefa(user);
                         break;
-                case 2: ceditTarefa(user);
+                case 2: clistTipoTarefa(user);
                         break;
-                case 3: ccloseTarefa(user);
+                case 3: ciniciarTarefa(user);//ceditTarefa(user);
                         break;
-                case 4: cstatusTarefa(user);
+                case 4: ccloseTarefa(user);
                         break;
-                case 5: creadyTarefa(user);
+                case 5: cstatusTarefa(user);
                         break;
-                case 6: cfinishedTarefa(user);
+                case 6: creadyTarefa(user);
                         break;
-                case 7: clistTarefa(user);
+                case 7: cfinishedTarefa(user);
                         break;
+                case 8: clistTarefa(user);
+                        break;
+                case 9: break; // "Listar as tarefas de todos" maybe
             }
         } while (menuselected.getOpcao()!=0);
     }
-    
     
     public  boolean userExiste(String user) throws SimpleExecption{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -210,52 +223,78 @@ public class Interface {///implements Facede{
     } 
       
      
-    public  void caddTarefa(String user) throws SimpleExecption {
-        Scanner is = new Scanner(System.in);
+    public  void caddTipoTarefa(String user) throws SimpleExecption {
         String tarefa;
-        String[] objetos = null;
-        int i=0;
+        String[] objetos;
+        Integer[] numbers;
         
         
         System.out.println("\nQual o tipo de tarefa a adicionar?");
-        tarefa = is.nextLine();
+        tarefa = Input.lerString();
+        System.out.println("\nQuantos objetos contem?");
+        int len = Input.lerInt();
+        objetos = new String[len];
+        numbers = new Integer[len];
         
-        System.out.println("\nInsira a lista de objetos a utlizar pela tarefa (termine com o caractere 'q':");
-        do{
-            objetos[i] = is.nextLine();
-            i++;
-        } while(!(objetos[i-1].equals("q")));
+        System.out.println("\nLista de objetos: ");
+        for (int j = 0; j < len; j++) {
+            objetos[j] = Input.lerString();
+            numbers[j] = Input.lerInt();
+        }
+
+        f.addTipoTarefa(user, tarefa, objetos, numbers);
+    }
+    
+    public void clistTipoTarefa(String user) throws SimpleExecption {
+        String[] tiposTarefas = f.listTipoTarefa(user);
+        System.out.println("Lista de Tipo de tareas do utilizador" + user + ":");
+        for(String tar: tiposTarefas) System.out.println(tar);
+    }
+                        
+    
+    public  void ciniciarTarefa(String user) throws SimpleExecption {
+        System.out.println("\nQual o tipo de tarefa a Iniciar?");
+        String tarefa = Input.lerString();
         
-        f.addTipoTarefa(user, tarefa, objetos);
+        String codigo = f.openTarefa(user, tarefa);
+        System.out.println("\n Tarefa iniciada com sucesso codigo: " + codigo);
     }
         
      
-    public  void ceditTarefa(String user) throws SimpleExecption {
-        Scanner is = new Scanner(System.in);
-        String tarefa;
-        String[] objetos = null;
-        int i=0;
-        
-        
-        System.out.println("\nQual o tipo de tarefa a editar?");
-        tarefa = is.nextLine();
-        
-        System.out.println("\nInsira a lista de objetos a utlizar pela tarefa (termine com o caractere 'q':");
-        do{
-            objetos[i] = is.nextLine();
-            i++;
-        } while(!(objetos[i-1].equals("q")));
-        
-        f.editTipoTarefa(user, tarefa, objetos);
-    }
-        
-     
+//    public  void ceditTarefa(String user) throws SimpleExecption {
+//        Scanner is = new Scanner(System.in);
+//        String tarefa;
+//        String[] objetos = null;
+//        int i=0;
+//        
+//        
+//        System.out.println("\nQual o tipo de tarefa a editar?");
+//        tarefa = is.nextLine();
+//        
+//        System.out.println("\nInsira a lista de objetos a utlizar pela tarefa (termine com o caractere 'q':");
+//        do{
+//            objetos[i] = is.nextLine();
+//            i++;
+//        } while(!(objetos[i-1].equals("q")));
+//        
+//        f.editTipoTarefa(user, tarefa, objetos);
+//    }
+//{"Criar TipoTarefa", //addTipoTarefa
+////"Alterar Tarefa", 
+//"Iniciar Tarefa",  //openTarefa
+//"Terminar Tarefa", //closeTarefa
+//"Consultar Estado de Tarefa",//statusTarefa
+//"Requesitar Notificacao de Tarefa Pronta a ser Executada", //readyTarefa
+//"Requesitar Notificacao de Conclusao de Tarefa", //finishedTarefa
+//"Listar as minhas de Tarefas", //listTarefa
+//"Listar as tarefas de todos"};//listAllTarefa
+
     public  void ccloseTarefa(String user) throws SimpleExecption {
         Scanner is = new Scanner(System.in);
         String tarefa;
         
         
-        System.out.println("\nQual o codigo da tarefa a remover?");
+        System.out.println("\nQual o codigo da tarefa a terminar?");
         tarefa = is.nextLine();
         
         f.closeTarefa(user, tarefa);
@@ -270,7 +309,8 @@ public class Interface {///implements Facede{
         System.out.println("\nQual o codigo da tarefa a verificar?");
         tarefa = is.nextLine();
         
-        f.statusTarefa(user, tarefa);
+        String status = f.statusTarefa(user, tarefa);
+        System.out.println("O status é: "+ status);
     }    
     
      
@@ -283,18 +323,19 @@ public class Interface {///implements Facede{
         tarefa = is.nextLine();
         
         f.readyTarefa(user, tarefa); 
+        System.out.println("Tarefa Em execução");
     }
        
      
     public  void cfinishedTarefa(String user) throws SimpleExecption {
         Scanner is = new Scanner(System.in);
-        String tarefa;
         
         
         System.out.println("\nQual o codigo da tarefa a ser notificada?");
-        tarefa = is.nextLine();
+        String tarefa = is.nextLine();
         
-        f.finishedTarefa(user, tarefa); 
+        f.finishedTarefa(user, tarefa);
+        System.out.println("Tarefa terminada");
     }
     
     
@@ -304,31 +345,6 @@ public class Interface {///implements Facede{
         System.out.println("Lista de tareas do utilizador" + user + ":");
         for(String tar: tarefas) System.out.println(tar);
     } 
-    
-     
-    public  void caddObj() throws SimpleExecption {
-        Scanner is = new Scanner(System.in);
-        String objeto;
-        
-        
-        System.out.println("\nQual o nome do objeto a ser adicionado?");
-        objeto = is.nextLine();
-        
-        f.addObj(objeto);
-    }
-    
-     
-    public  void cremObj() throws SimpleExecption {
-        Scanner is = new Scanner(System.in);
-        String objeto;
-        
-        
-        System.out.println("\nQual o nome do objeto a ser removido?");
-        objeto = is.nextLine();
-        
-        f.remObj(objeto);
-    }
-    
      
     public  void caltObj() throws SimpleExecption {
         Scanner is = new Scanner(System.in);
@@ -347,25 +363,13 @@ public class Interface {///implements Facede{
     
      
     public void clistObj() throws SimpleExecption {
-        String[] objetos = f.listObj();
+        KeyValue<String[], Integer[]> objetos = f.listObj();
         
         System.out.println("Lista de objetos no armazem:");
-        for(String obj: objetos) System.out.println(obj);
+        for (int i = 0; i < objetos.getKey().length; i++) {
+            System.out.println(objetos.getKey()[i] + " - "
+                    + objetos.getValue()[i]
+            );
+        }
     } 
-
-     
-    public void ceditUser() throws SimpleExecption {
-        Scanner is = new Scanner(System.in);
-        String usern, npass;
-        
-        
-        System.out.println("\nQual o nome de utilizador");
-        usern = is.nextLine();
-        
-        System.out.println("\nQual a nova palavra pass?");
-        npass = is.nextLine();
-        
-       f.editUser(usern, npass);
-    }
-
 }

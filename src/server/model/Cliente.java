@@ -7,6 +7,7 @@
 package server.model;
 
 import java.util.HashMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
@@ -14,11 +15,14 @@ import java.util.HashMap;
  */
 public class Cliente 
 {
+    private final ReentrantLock clientsLock = new ReentrantLock();
     private String nome, password;
-    private HashMap<String, Tarefa> tarefas;
-    private HashMap<String, TarefaExecucao> tarefasExec;
-
+    private final HashMap<String, TipoTarefa> tarefas;
+    private final HashMap<String, Tarefa> tarefasExec;
+    private int tarefasExecCod;
+    
     public Cliente() {
+        this.tarefasExecCod = 0;
         this.nome = "";
         this.password = "";
         this.tarefas = new HashMap<>();
@@ -26,6 +30,7 @@ public class Cliente
     }
     
     public Cliente(String nome, String password) {
+        this.tarefasExecCod = 0;
         this.nome = nome;
         this.password = password;
         this.tarefas = new HashMap<>();
@@ -40,12 +45,45 @@ public class Cliente
         return password;
     }
 
-    public HashMap<String, Tarefa> getTarefas() {
-        return tarefas;
+    public String[] getTipoTarefas() {
+        String[] t = new String[tarefas.size()];
+        int i = 0;
+        for (TipoTarefa va : tarefas.values()) {
+            t[i++] = va.getNome();
+        }
+        return t;
     }
 
-    public HashMap<String, TarefaExecucao> getTarefasExec() {
-        return tarefasExec;
+    public String[] getTarefas() {
+        String[] t = new String[tarefasExec.size()];
+        int i = 0;
+        for (TipoTarefa va : tarefasExec.values()) {
+            t[i++] = va.getNome();
+        }
+        return t;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void addTipoTarefa(TipoTarefa t) {
+        tarefas.put(t.getNome(), t);
+    }
+
+    public TipoTarefa getTipoTarefa(String tipoTarefa) {
+        return tarefas.get(tipoTarefa);
+    }
+
+    public Tarefa getTarefa(String codTarefa) {
+        return tarefasExec.get(codTarefa);
+    }
+    
+    public String addTarefa(Tarefa t){
+        tarefasExecCod++;
+        t.setCodigo(this.nome + "_" + tarefasExecCod);
+        tarefasExec.put(t.getCodigo(), t);
+        return t.getCodigo();
     }
     
 }

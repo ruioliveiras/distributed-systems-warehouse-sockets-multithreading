@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.Socket;
 import shared.ComunicationSocket;
 import shared.Facede;
+import shared.KeyValue;
 import shared.SimpleExecption;
 
 /**
@@ -63,21 +64,22 @@ public class ClientHandler implements Runnable {
         switch (messageCode) {
             case 1: response(data.addUser(cs.popString(), cs.popString()),"");
                 return ; //function for code 1;
-            case 2: response(data.editUser(cs.popString(), cs.popString()),"");
+            case 2:// response(data.editUser(cs.popString(), cs.popString()),"");
                 return ;//function for code 2;
             case 3: response(data.listUser(cs.popString()),"");
                 return ;//function for code 3;
-            case 4: response(data.addObj(cs.popString()),"");
+            case 4:// response(data.addObj(cs.popString()),"");
                 return;
-            case 5: response(data.remObj(cs.popString()),"");
+            case 5:// response(data.remObj(cs.popString()),"");
                 return;
             case 6: response(data.supplyObj(cs.popString(), cs.popInt()),"");
                 return;
-            case 7: response(data.listObj(),"");
+            case 7: KeyValue<String[],Integer[]> a = data.listObj();
+                response(a.getKey(), a.getValue(),"");
                 return;
-            case 8: response(data.addTipoTarefa(cs.popString(), cs.popString(), cs.popArray("#")),"");
+            case 8: response(data.addTipoTarefa(cs.popString(), cs.popString(), cs.popArray("#"), cs.popArrayInt("#") ),"");
                 return;
-            case 9: response(data.editTipoTarefa(cs.popString(), cs.popString(), cs.popArray("#")),"");
+            case 9:// response(data.editTipoTarefa(cs.popString(), cs.popString(), cs.popArray("#"), cs.popArrayInt("#")),"");
                 return;
             case 10: response(data.openTarefa(cs.popString(), cs.popString()),"");
                 return;
@@ -99,8 +101,17 @@ public class ClientHandler implements Runnable {
     public void response(Boolean a, String message){
         cs.sendOK(a, message);
     }
-
+   
+    public void response(String a, String message){
+        cs.sendOK(true, a);
+    }
+    
     public void response(String[] a, String message){
         cs.sendOK(true, a);
     }
+    
+    public void response(String[] a, Integer[] b , String message){
+        cs.sendOK(true, a, b);
+    }
+    
 }

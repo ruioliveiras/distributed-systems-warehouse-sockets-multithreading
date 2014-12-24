@@ -6,6 +6,7 @@
 
 package server.model;
 
+import java.util.Objects;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -19,21 +20,25 @@ public class Item {
     private String nome;
     private Lock l;
     private Condition nVazio;
-
-    public Item(){
+    private Condition mCondition;
+    private int cCounter;
     
+    public Item(Condition condition){
+        this.cCounter = 0;
         this.quantidade = 0;
         this.nome = "";
         this.l = new ReentrantLock();
         this.nVazio = l.newCondition();
+        this.mCondition = condition;
     }
     
-    public Item(String nome, int quantidade){
-    
+    public Item(Condition condition, String nome, int quantidade){
+        this.cCounter = 0;
         this.quantidade = quantidade;
         this.nome = nome;
         this.l = new ReentrantLock();
         this.nVazio = l.newCondition();
+        this.mCondition = condition;
     }
 
     public String getNome() {
@@ -53,6 +58,18 @@ public class Item {
         }
         finally{ l.unlock();}
     }
+
+    public void myWait() throws InterruptedException{
+        int snap;
+        cCounter++;
+        do{
+            snap = cCounter;
+            mCondition.await();
+        }while (snap > 0);
+
+        cCounter--;
+    }
+
     
     public void retrieve(int quantidade){
     
@@ -78,6 +95,21 @@ public class Item {
     public int hashCode() 
     {
         return nome.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Item other = (Item) obj;
+        if (!Objects.equals(this.nome, other.nome)) {
+            return false;
+        }
+        return true;
     }
     
     
