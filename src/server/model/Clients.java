@@ -29,6 +29,7 @@ public class Clients {
             if (c == null){
                 throw new SimpleExecption(3, "User", "Utilizador não Existe");
             }
+            c.lock();
             return c;
         } finally {
             clientsLock.unlock();
@@ -44,13 +45,13 @@ public class Clients {
         }
     }
     
-    public Client[] allClient(){
+    public String[] allClientNames(){
         clientsLock.lock();
         try {
             int i = 0 ;
-            Client[] ret = new Client[clients.size()];
+            String[] ret = new String[clients.size()];
             for (Client value : clients.values()) {
-                ret[i] = value;
+                ret[i] = value.getNome();
                 i++;
             }
             return ret;

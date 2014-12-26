@@ -212,16 +212,16 @@ public class Interface {///implements Facede{
 //"Listar as minhas de Tarefas", //listTarefa
         do{
             menuamigosSelect.executa();
-            switch (menuselected.getOpcao()) {
-                case 1: clistTipoTarefa(user);
+            switch (menuamigosSelect.getOpcao()) {
+                case 1: clistTipoTarefa(friend);
                         break;
-                case 2: cstatusTarefa(user);
+                case 2: cstatusTarefa(friend);
                         break;
-                case 3: creadyTarefa(user);
+                case 3: creadyTarefa(friend);
                         break;
-                case 4: cfinishedTarefa(user);
+                case 4: cfinishedTarefa(friend);
                         break;
-                case 5: clistTarefa(user);
+                case 5: clistTarefa(friend);
                         break;
             }
         } while (menuamigosSelect.getOpcao()!=0);        

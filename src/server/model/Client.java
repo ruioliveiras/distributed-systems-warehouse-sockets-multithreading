@@ -51,116 +51,77 @@ public class Client implements Lock{
     }
 
     public String[] allTipoTarefas() {
-        lock.lock();
-        try {
             String[] t = new String[tarefas.size()];
             int i = 0;
             for (TipoTarefa va : tarefas.values()) {
                 t[i++] = va.getNome();
             }
             return t;
-        } finally {
-            lock.unlock();
-        }
+        
     }
 
     public String[] allTarefas() {
-        lock.lock();
-        try {
             String[] t = new String[tarefasExec.size()];
             int i = 0;
             for (Tarefa va : tarefasExec.values()) {
                 t[i++] = va.getCodigo();
             }
             return t;
-        } finally {
-            lock.unlock();
-        }
-    }
+            }
 
     public void addTipoTarefa(TipoTarefa t) {
-        lock.lock();
-        try {
             tarefas.put(t.getNome(), t);
-        } finally {
-            lock.unlock();
-        }
+        
     }
 
     public String addTarefa(Tarefa t) {
-        lock.lock();
-        try {
             tarefasExecCod++;
             t.setCodigo(this.nome + "_" + tarefasExecCod);
             t.setConditionFinished(lock.newCondition());
             t.setConditionReady(lock.newCondition());
             tarefasExec.put(t.getCodigo(), t);
             return t.getCodigo();
-        } finally {
-            lock.unlock();
-        }
     }
 
     public TipoTarefa getTipoTarefa(String tipoTarefa) throws SimpleExecption {
-        lock.lock();
-        try {
             TipoTarefa tt = tarefas.get(tipoTarefa);
             if (tt == null) {
                 throw new SimpleExecption(3, "TipoTarefa", "Tipo de tareafa não Existe");
             }
             return tt;
-        } finally {
-            lock.unlock();
-        }
     }
 
     public Tarefa getTarefa(String codTarefa) throws SimpleExecption{
-        lock.lock();
-        try {
             Tarefa t = tarefasExec.get(codTarefa);
             if (t == null) {
                 throw new SimpleExecption(3, "Tarefa", "codigo tarefa não Existe");
             }
             return t;
-        } finally {
-            lock.unlock();
-        }
     }
 
     public Tarefa remTarefa(String codTarefa) throws SimpleExecption{
-        lock.lock();
-        try {
             Tarefa t = tarefasExec.remove(codTarefa);
             if (t == null){
                 throw new SimpleExecption(3,"Tarefa","codigo de tarefa não existe");
             }
             return t;
-        } finally {
-            lock.unlock();
-        }
     }
 
     public void waitToFinished(String codTarefa) throws SimpleExecption{
-        lock.lock();
         try {
             Tarefa t = getTarefa(codTarefa);
             t.getConditionFinished().await();
         } catch (InterruptedException ex) {
             throw new SimpleExecption(0, "INTERRUPT", "Interrupt exception have ocurred");
-        } finally {
-            lock.unlock();
-        }
+        } 
     }
 
     public void waitToReady(String codTarefa) throws SimpleExecption{
-        lock.lock();
         try {
             Tarefa t = getTarefa(codTarefa);
             t.getConditionReady().await();
         } catch (InterruptedException ex) {
             throw new SimpleExecption(0, "INTERRUPT", "Interrupt exception have ocurred");
-        } finally {
-            lock.unlock();
         }
     }
 

@@ -20,8 +20,8 @@ public class TipoTarefa
     private final String nome;
     //possivel problema apesar de ser de leitura, 
     //private final HashMap<Item, Integer> items;
-    private Item[] items;
-    private Integer[] quatys;
+    private final Item[] items;
+    private final Integer[] quatys;
     
     public TipoTarefa(String nome, Item[] items,Integer[] quatys )
     {

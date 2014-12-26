@@ -54,7 +54,14 @@ public class WareHouse
             it.add(quant);
         }finally{ armazemLock.unlock(); }
     }
-       
+    
+    /** Apesar de estar dentro de WareHouse esta função nao precisa de controlo 
+     * de concorrencia do armazemLock porque nao usa o hashMap, tem acesso direto
+     * aos items.
+     * 
+     * @param t
+     * @throws SimpleExecption 
+     */
     public void want(Tarefa t) throws SimpleExecption {
         Tuple<Item[],Integer[]> tq = t.getItensTuple();
         Item[] items = tq.getA();
@@ -69,11 +76,13 @@ public class WareHouse
                     break;
                 }
             }
-            // devolve:
+            // devolve se nao consegui ter todos:
             if (i < items.length){
                 for (i = 0; i < iWait; i++) {
                     items[i].add(quaty[i]);
                 }
+                //este wait nao causo deadlock aqui no armazem porque o armazemLock
+                //nao esta a ser usado
                 items[iWait].itemWait();
             }
             
@@ -102,6 +111,11 @@ public class WareHouse
         return new Tuple<>(values,quats);
     }
 
+    /** Get Items just to Have you reference to items, the items are not locked
+     *  
+     * @param objs
+     * @return 
+     */
     public Item[] getItems(String[] objs) {
         clientsLock.lock();
         try {

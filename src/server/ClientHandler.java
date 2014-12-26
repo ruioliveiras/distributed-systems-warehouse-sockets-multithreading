@@ -108,7 +108,9 @@ public class ClientHandler implements Runnable {
                 return;
             case 16: response(data.listTipoTarefa(cs.pop(str)),"");
                 return;
-            case 17: response(data.login(cs.pop(str),cs.pop(str)),"");
+            case 17:Boolean b = data.login(cs.pop(str),cs.pop(str)); 
+                autenticado = b;
+                response(b,"");
                 return;
         }
         throw new SimpleExecption(1, "ClienHANDLER", "Invalid message code" + messageCode);
