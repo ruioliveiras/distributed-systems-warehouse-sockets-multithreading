@@ -8,8 +8,10 @@ package server.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import shared.SimpleExecption;
 import shared.Tuple;
 
 /**
@@ -37,7 +39,7 @@ public class WareHouse
     private Item getOrCreate(String nome){
         Item item = armazem.get(nome);
         if (item == null) {
-            item = new Item(armazemLock.newCondition(), nome, 0);
+            item = new Item(nome, 0);
             armazem.put(nome, item);
         }
         return item;
@@ -53,46 +55,38 @@ public class WareHouse
         }finally{ armazemLock.unlock(); }
     }
        
-    public void want(Tarefa t) throws InterruptedException {
-        //Item[] ps = new Item[t.];
-        HashMap<String, Integer> itens = t.getItens();
-        armazemLock.lock();
-        try{
-            boolean needToRepeat = true;
-            while(needToRepeat){
-                needToRepeat = false;
-                for (Map.Entry<String, Integer> entry : itens.entrySet()) {   
-                    String itemName = entry.getKey();
-                    Item item = getOrCreate(itemName);
-                    if (item.getQuantidade() <= entry.getValue() ){
-                        while(item.getQuantidade()<= entry.getValue()) { 
-                            item.myWait();
-                        }
-                        needToRepeat = true;
-                        break;
-                    }
+    public void want(Tarefa t) throws SimpleExecption {
+        Tuple<Item[],Integer[]> tq = t.getItensTuple();
+        Item[] items = tq.getA();
+        Integer[] quaty = tq.getB();
+        int i = 0, iWait;
+        
+        do{
+            i =0; iWait = -1; 
+            for (i = 0; i < items.length; i++) {
+                if (! items[i].retrieve(quaty[i])){
+                    iWait = i;
+                    break;
                 }
             }
-            
-            // if it are there then is have run all the array and 
-            
-            for (Map.Entry<String, Integer> entry : itens.entrySet()) {   
-                Item item = armazem.get(entry.getKey());
-                item.retrieve(entry.getValue());
+            // devolve:
+            if (i < items.length){
+                for (i = 0; i < iWait; i++) {
+                    items[i].add(quaty[i]);
+                }
+                items[iWait].itemWait();
             }
-            t.setEstado("working");
-        } finally {
-            armazemLock.unlock();
-        }
+            
+        }while(iWait != -1);
     }
     
     public void dontWantMore(Tarefa t)
     {
-        HashMap<String, Integer> itens = t.getItens();
+        Item[] it = t.getItems();
+        Integer[] qu = t.getQuatys();
         
-        for (Map.Entry<String, Integer> entry : itens.entrySet()) 
-        {
-            this.supply(entry.getKey(), entry.getValue());
+        for (int i = 0; i < it.length; i++) {
+            it[i].add(qu[i]);
         }
     }
  
@@ -114,11 +108,7 @@ public class WareHouse
             Item[] res = new Item[objs.length];
             int i = 0;
             for (String obj : objs) {
-                res[i] = armazem.get(obj);
-                if (res[i] == null){
-                    res[i] = new Item(armazemLock.newCondition(),obj, 0);
-                    armazem.put(obj, res[i]);
-                }
+                res[i] = getOrCreate(obj);
                 i++;
             }
             return res;

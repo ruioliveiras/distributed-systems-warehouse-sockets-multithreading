@@ -3,42 +3,37 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package server.model;
 
 import java.util.Objects;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import shared.SimpleExecption;
 
 /**
  *
  * @author Jose
  */
 public class Item {
+
     private int quantidade;
-    private String nome;
-    private Lock l;
-    private Condition nVazio;
-    private Condition conditon;
-    private int cCounter;
-    
-    public Item(Condition condition){
-        this.cCounter = 0;
+    private final String nome;
+    private final Lock myLock;
+    private final Condition myCond;
+
+    public Item() {
         this.quantidade = 0;
         this.nome = "";
-        this.l = new ReentrantLock();
-        this.nVazio = l.newCondition();
-        this.conditon = condition;
+        this.myLock = new ReentrantLock();
+        this.myCond = myLock.newCondition();
     }
-    
-    public Item(Condition condition, String nome, int quantidade){
-        this.cCounter = 0;
+
+    public Item(String nome, int quantidade) {
         this.quantidade = quantidade;
         this.nome = nome;
-        this.l = new ReentrantLock();
-        this.nVazio = l.newCondition();
-        this.conditon = condition;
+        this.myLock = new ReentrantLock();
+        this.myCond = myLock.newCondition();
     }
 
     public String getNome() {
@@ -48,51 +43,52 @@ public class Item {
     public int getQuantidade() {
         return quantidade;
     }
-    
-    public void add(int quantidade){
-    
-        l.lock();
-        try{
+
+    public void add(int quantidade) {
+        myLock.lock();
+        try {
             this.quantidade += quantidade;
-            conditon.signalAll();
+            myCond.signalAll();
+        } finally {
+            myLock.unlock();
         }
-        finally{ l.unlock();}
     }
 
-    public void myWait() throws InterruptedException{
-        int snap;
-        cCounter++;
-        do{
-            snap = cCounter;
-            conditon.await();
-        }while (snap > 1);
-        cCounter--;
-    }
-
-    
-    public void retrieve(int quantidade){
-    
-        l.lock();
-        try{
-            while(quantidade<=0){
-                try {
-                    nVazio.await();
-                } catch (InterruptedException ex){}
+    public void itemWait() throws SimpleExecption {
+        myLock.lock();
+        try {
+            try {
+                myCond.await();
+            } catch (InterruptedException ex) {
+                throw new SimpleExecption(0, "INTERRUPTION", "interruption inside item");
             }
-            this.quantidade -= quantidade;
+        } finally {
+            myLock.unlock();
         }
-        finally{ l.unlock();}
     }
-    
-    
-    
+
+    public boolean retrieve(int quantidade) {
+
+        myLock.lock();
+        try {
+            if (this.quantidade >= quantidade){
+                this.quantidade -= quantidade;
+                return true;
+            }else{
+                return false;
+            }
+        } finally {
+            myLock.unlock();
+        }
+    }
+
     /**
      * Faz o hashCode do item so com a string do nome
+     *
      * @return nome.hashCode
      */
     @Override
-    public int hashCode() 
-    {
+    public int hashCode() {
         return nome.hashCode();
     }
 
@@ -110,6 +106,5 @@ public class Item {
         }
         return true;
     }
-    
-    
+
 }

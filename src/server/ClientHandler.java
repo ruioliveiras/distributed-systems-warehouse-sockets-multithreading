@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.Socket;
 import shared.ComunicationSocket;
 import shared.Facede;
-import shared.Tuple;
 import shared.SimpleExecption;
 
 /**
@@ -22,11 +21,13 @@ public class ClientHandler implements Runnable {
     private final Server parent;
     private ComunicationSocket cs;
     private Facede data;
+    private boolean autenticado;
 
     public ClientHandler(Server parent, Socket socket, Facede facade) throws IOException {
         this.parent = parent;
         this.data = facade;
         this.socket = socket;
+        this.autenticado = false;
     }
 
     private void init() throws IOException {
@@ -68,6 +69,11 @@ public class ClientHandler implements Runnable {
         Integer i = 1;
         Integer[] iArray = {1};
         String[] strArray = {"a"};
+        
+        //Esta autenticado
+        if (messageCode != 1 && messageCode != 17 && !autenticado){
+            throw new SimpleExecption(3, "AUtenticação", "Nao pode efeturar esta ação porque nao esta autenticado");
+        }
         
         switch (messageCode) {
             case 1: response(data.addUser(cs.pop(str), cs.pop(str)),"");

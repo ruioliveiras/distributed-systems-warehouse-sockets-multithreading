@@ -49,10 +49,8 @@ public class Menu {
     /** Ler uma op��o v�lida */
     private int lerOpcao() {
         int op; 
-        Scanner is = new Scanner(System.in);
-        
         System.out.print("Opção: ");
-        op = is.nextInt();
+        op = Input.lerInt();
         if (op<0 || op>this.opcoes.size()) {
             System.out.println("Opção Inválida!");
             op = -1;

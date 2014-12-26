@@ -21,7 +21,7 @@ import shared.SimpleExecption;
  */
 public class Interface {///implements Facede{
 
-    public  Menu menumain, menucliente, menuware, menuselected, menulogreg; 
+    public  Menu menumain, menucliente, menuware, menuselected, menulogreg,menuamigosSelect; 
     private String user;
     private Facede f;
             
@@ -67,6 +67,7 @@ public class Interface {///implements Facede{
                             break;
                     case 2: menuwareh();
                             break;
+                    case 3: menuamigos(user);
                 }
 
             }catch(SimpleExecption s){
@@ -101,8 +102,10 @@ public class Interface {///implements Facede{
     
     
     protected  void carregarMenus() {
-    String[] ops = {"Menu Cliente",
-                    "Menu WareHouse"};
+    String[] ops = {"Menu area Cliente",
+                    "Menu WareHouse",
+                    "Menu Amigos,"
+                    };
     
     String[] logreg = {"Login", //login
                        "Registar"}; //addUser
@@ -119,9 +122,17 @@ public class Interface {///implements Facede{
                                   "Consultar Estado de Tarefa",//statusTarefa
                                   "Requesitar Notificacao de Tarefa Pronta a ser Executada", //readyTarefa
                                   "Requesitar Notificacao de Conclusao de Tarefa", //finishedTarefa
+                                  "Listar as minhas de Tarefas"
+                                  };//listAllTarefa
+    
+    String [] opsamigosSelect = {"lista TipoTarefas", 
+                                  "Consultar Estado de Tarefa",//statusTarefa
+                                  "Requesitar Notificacao de Tarefa Pronta a ser Executada", //readyTarefa
+                                  "Requesitar Notificacao de Conclusao de Tarefa", //finishedTarefa
                                   "Listar as minhas de Tarefas", //listTarefa
-                                  "Listar as tarefas de todos"};//listAllTarefa
+                                  };//listAllTarefa
 
+    
     String [] opsware = {//"Adicionar Objeto", //supplyObj
                          //"Retirar Objeto", //
                          "Adicionar Quantidade de Objeto", //supplyObj
@@ -132,6 +143,7 @@ public class Interface {///implements Facede{
     menuselected = new Menu(opsclienteSelect);
     menuware = new Menu(opsware);
     menulogreg = new Menu(logreg);
+    menuamigosSelect = new Menu(opsamigosSelect);
     }
     
 /*    
@@ -182,7 +194,38 @@ public class Interface {///implements Facede{
             System.out.println("Utilizador nao Existe!");
         }
     }
-    
+    protected void menuamigos(String user) throws SimpleExecption{
+        String friend;
+        do{
+            System.out.println("Insera nome do cliente ou - para ver os nomes");
+            friend = Input.lerString();
+            if (friend.equals("-")){
+                for (String col : f.listUser(user)) {
+                    System.out.println(col);
+                }
+            }
+        }while(friend.equals("-"));
+//"lista TipoTarefas", 
+//"Consultar Estado de Tarefa",//statusTarefa
+//"Requesitar Notificacao de Tarefa Pronta a ser Executada", //readyTarefa
+//"Requesitar Notificacao de Conclusao de Tarefa", //finishedTarefa
+//"Listar as minhas de Tarefas", //listTarefa
+        do{
+            menuamigosSelect.executa();
+            switch (menuselected.getOpcao()) {
+                case 1: clistTipoTarefa(user);
+                        break;
+                case 2: cstatusTarefa(user);
+                        break;
+                case 3: creadyTarefa(user);
+                        break;
+                case 4: cfinishedTarefa(user);
+                        break;
+                case 5: clistTarefa(user);
+                        break;
+            }
+        } while (menuamigosSelect.getOpcao()!=0);        
+    }
     
     protected void menuuser(String user) throws SimpleExecption{
         do {

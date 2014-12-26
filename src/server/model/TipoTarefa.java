@@ -6,10 +6,9 @@
 
 package server.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import server.model.Item;
+import java.util.concurrent.locks.Condition;
 import shared.Tuple;
 
 /**
@@ -18,58 +17,72 @@ import shared.Tuple;
  */
 public class TipoTarefa 
 {
-    private String nome;
-    private HashMap<String, Integer> itens;
-
-    public TipoTarefa()
-    {
-        this.nome = "";
-        this.itens = new HashMap<String, Integer>();
-    }
+    private final String nome;
+    //possivel problema apesar de ser de leitura, 
+    //private final HashMap<Item, Integer> items;
+    private Item[] items;
+    private Integer[] quatys;
     
-    public TipoTarefa(String nome)
+    public TipoTarefa(String nome, Item[] items,Integer[] quatys )
     {
         this.nome = nome;
-        this.itens = new HashMap<String, Integer>();
+        this.items = items;
+        this.quatys = quatys;
     }
     
     public TipoTarefa(TipoTarefa f)
     {
         this.nome = f.getNome();
-        this.itens = f.getItens();
+        this.items = f.getItems();
+        this.quatys = f.getQuatys();
     }
     
     public String getNome()
     {
         return this.nome;
     }
+
     
-    public void addItem(String it, int quant)
+    public Tuple<Item[],Integer[]> getItensTuple()
     {
-        this.itens.put(it, quant);
+        return new Tuple<>(items, quatys);
+    }    
+
+    public Item[] getItems() {
+        return items;
     }
 
-    public HashMap<String, Integer> getItens()
-    {
-        HashMap<String, Integer> ret = new HashMap<String, Integer>();
-        
-        for (Map.Entry<String, Integer> entry : itens.entrySet()) 
-        {
-            ret.put(entry.getKey(), entry.getValue());      
-        }
-        
-        return ret;
+    public Integer[] getQuatys() {
+        return quatys;
     }
     
+//    
+//    public HashMap<Item, Integer> getItens()
+//    {
+//        HashMap<Item, Integer> ret = new HashMap<Item, Integer>();
+//        
+//        for (Map.Entry<Item, Integer> entry : items.entrySet()) 
+//        {
+//            ret.put(entry.getKey(), entry.getValue());      
+//        }
+//        
+//        return ret;
+//    }
+
+    
+    @Override
     public TipoTarefa clone()
     {
         return new TipoTarefa(this);
     }
 
-    public void addItems(String[] objetos, Integer[] integer) {
-        int i =0 ;
-        for (String objeto : objetos) {
-            itens.put(objeto, integer[i++]);
-        }
-    }
+//    public void addItems(Item[] objetos, Integer[] integer) {
+//        int i =0 ;
+//        for (Item objeto : objetos) {
+//            items.put(objeto, integer[i++]);
+//        }
+//    }
+
+
+    
 }
