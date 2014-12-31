@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import shared.Facede;
-import shared.SimpleExecption;
+import shared.SimpleExeption;
 import shared.Interface;
 
 /**
@@ -54,7 +54,7 @@ public class Server implements Runnable{
         }
     }
     
-    public static void initFacade(Facede f) throws SimpleExecption{
+    public static void initFacade(Facede f) throws SimpleExeption{
         f.addUser("admin", "admin");
         f.addUser("rui", "admin");
         f.addUser("pedro", "admin");
@@ -82,7 +82,7 @@ public class Server implements Runnable{
     }
     
     
-    public static void main(String[] args) throws IOException, SimpleExecption {
+    public static void main(String[] args) throws IOException, SimpleExeption {
         final Server rs = new Server();
         initFacade(rs.getFacade());
         Thread t = new Thread(rs);

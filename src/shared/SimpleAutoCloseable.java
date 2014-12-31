@@ -11,5 +11,5 @@ package shared;
  */
 public interface SimpleAutoCloseable extends AutoCloseable{
     @Override
-    public void close() throws SimpleExecption;
+    public void close() throws SimpleExeption;
 }

@@ -39,7 +39,7 @@ public class ComunicationSocket {
         bw = new PrintWriter(osr);
     }
 
-    public <T> void sendMessage(int messageCode, T... attrs) throws SimpleExecption {
+    public <T> void sendMessage(int messageCode, T... attrs) throws SimpleExeption {
         bw.print(messageCode + "," + attrs.length + ",");
         for (T attr : attrs) {
             bw.print(serializer.serialize(attr) + ",");
@@ -49,7 +49,7 @@ public class ComunicationSocket {
     }
 
     
-    public int readMessage() throws SimpleExecption {
+    public int readMessage() throws SimpleExeption {
         String[] str;
         try {
             String aux = br.readLine();
@@ -74,37 +74,37 @@ public class ComunicationSocket {
             return messageCode;
 
         } catch (IOException | NumberFormatException ex) {
-            throw new SimpleExecption(1, "SOCKET", "error while reading");
+            throw new SimpleExeption(1, "SOCKET", "error while reading");
         }
     }
     
-    public <T> void sendOK(boolean isOk, T message) throws SimpleExecption {
+    public <T> void sendOK(boolean isOk, T message) throws SimpleExeption {
         String sIsOk = (isOk) ? "OK" : "NOTOK";
         sendMessage(-1, sIsOk, serializer.serialize(message));
     }
 
-    public boolean readOK() throws SimpleExecption {
+    public boolean readOK() throws SimpleExeption {
 //        try {
         readMessage();
         String sIsOk = pop("String");
         if (sIsOk.equals("OK")) {
             return true;
         } else {
-            throw new SimpleExecption(3, "SOCKET", pop("String"));
+            throw new SimpleExeption(3, "SOCKET", pop("String"));
         }
 //        } catch (Exception ex) {
-//            throw new SimpleExecption(1, "SOCKET", "error while reading OK message");
+//            throw new SimpleExeption(1, "SOCKET", "error while reading OK message");
 //        }
     }
 
-    public <T> T get(int index, T t) throws SimpleExecption {
+    public <T> T get(int index, T t) throws SimpleExeption {
         if (index < attrs.length && index >= 0){
             return serializer.descerialize(attrs[index], t);
         }
-        throw  new SimpleExecption(1, "SOCKET", "Invalid number arguments: " + index);
+        throw  new SimpleExeption(1, "SOCKET", "Invalid number arguments: " + index);
     }
     
-    public <T> T pop(T t) throws SimpleExecption {
+    public <T> T pop(T t) throws SimpleExeption {
        return get(popIndex++, t);
     }
 }

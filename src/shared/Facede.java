@@ -22,9 +22,9 @@ public interface Facede {
      * @param username String with the username
      * @param password String with the password
      * @return True if is logged, False if is not logged
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public Boolean login(String username, String password) throws SimpleExecption;
+    public Boolean login(String username, String password) throws SimpleExeption;
    
     /* FOR USER */
     /**
@@ -32,9 +32,9 @@ public interface Facede {
      * @param username String with the username
      * @param password String with the password
      * @return True if success, false if it is not
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public Boolean addUser(String username, String password) throws SimpleExecption;
+    public Boolean addUser(String username, String password) throws SimpleExeption;
    
     /**
      * 
@@ -43,15 +43,15 @@ public interface Facede {
      * @return return true if succes, false if it is not
      * @throws SimpleExecption 
      */
-   // public Boolean editUser(String username, String password) throws SimpleExecption;
+   // public Boolean editUser(String username, String password) throws SimpleExeption;
     
     /**
      * Return 
      * @param username String with the username
      * @return the list of all users
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public String[] listUser(String username) throws SimpleExecption;
+    public String[] listUser(String username) throws SimpleExeption;
     
     
     /** Add new tipoTarefa for an existent user;
@@ -61,17 +61,17 @@ public interface Facede {
      * @param objetos The objects and his quanties  
      * @param quants  
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public Boolean addTipoTarefa(String user, String tipoTarefa, String objetos[], Integer quants[]) throws SimpleExecption;
+    public Boolean addTipoTarefa(String user, String tipoTarefa, String objetos[], Integer quants[]) throws SimpleExeption;
     
     /** Get The list of Tarefas of an User;
      * 
      * @param user
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public String[] listTipoTarefa(String user) throws SimpleExecption;
+    public String[] listTipoTarefa(String user) throws SimpleExeption;
     
     
     /*FOR WAREHOUSE*/
@@ -81,7 +81,7 @@ public interface Facede {
      * @return Success boolean
      * @throws SimpleExecption 
      */
-    //public Boolean addObj(String nome) throws SimpleExecption;
+    //public Boolean addObj(String nome) throws SimpleExeption;
 
     /**
      * Delete an Object
@@ -89,23 +89,23 @@ public interface Facede {
      * @return Success boolean
      * @throws SimpleExecption 
      */
-    //public Boolean remObj(String nome) throws SimpleExecption;
+    //public Boolean remObj(String nome) throws SimpleExeption;
 
     /**
      * Add more items 
      * @param nome
      * @param quantidade
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public Boolean supplyObj(String nome, int quantidade) throws SimpleExecption;
+    public Boolean supplyObj(String nome, int quantidade) throws SimpleExeption;
 
     /**
      * Get all systems Objets with his actual quanty
      * @return 
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public Tuple<String[],Integer[]> listObj() throws SimpleExecption;
+    public Tuple<String[],Integer[]> listObj() throws SimpleExeption;
     
     /*FOR TAREFA*/
     
@@ -118,7 +118,19 @@ public interface Facede {
      * @return
      * @throws SimpleExecption 
      */
-    //public Boolean editTipoTarefa(String user, String tipoTarefa, String objetos[], Integer quants[]) throws SimpleExecption;
+    //public Boolean editTipoTarefa(String user, String tipoTarefa, String objetos[], Integer quants[]) throws SimpleExecption;    
+    /*FOR TAREFA*/
+    
+    /** Edit new tipoTarefa for an existent user;
+     * (Same as addTipoTarefa)
+     * @param user
+     * @param tipoTarefa
+     * @param objetos
+     * @param quants
+     * @return
+     * @throws SimpleExecption 
+     */
+    //public Boolean editTipoTarefa(String user, String tipoTarefa, String objetos[], Integer quants[]) throws SimpleExeption;
 
 
     
@@ -127,60 +139,60 @@ public interface Facede {
      * @param user
      * @param tipoTarefa
      * @return codTarefa
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public String openTarefa(String user, String tipoTarefa) throws SimpleExecption;
+    public String openTarefa(String user, String tipoTarefa) throws SimpleExeption;
 
     /** Close a previous opened Tarefa.
      * 
      * @param user
      * @param codTarefa
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public Boolean closeTarefa(String user, String codTarefa) throws SimpleExecption;
+    public Boolean closeTarefa(String user, String codTarefa) throws SimpleExeption;
     
     /** Check the status of an Opened Tarefa
      * 
      * @param user
      * @param codTarefa
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public String statusTarefa(String user, String codTarefa) throws SimpleExecption;
+    public String statusTarefa(String user, String codTarefa) throws SimpleExeption;
     
     /** Ask the server to be notify when the Opened Tarefa is Ready to Work
      * 
      * @param user
      * @param codTarefa
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public Boolean readyTarefa(String user,  String codTarefa) throws SimpleExecption;
+    public Boolean readyTarefa(String user,  String codTarefa) throws SimpleExeption;
     
     /** Ask the server to be notify when some Tarefa be closed.
      * 
      * @param user
      * @param codTarefa
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public Boolean finishedTarefa(String user,  String codTarefa) throws SimpleExecption;
+    public Boolean finishedTarefa(String user,  String codTarefa) throws SimpleExeption;
      
     /** Get the list of opened Tarefas of an user;
      * 
      * @param user
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public String[] listTarefa(String user) throws SimpleExecption;
+    public String[] listTarefa(String user) throws SimpleExeption;
     
     /**
      * Get the list of opened Tarefas all the users
      * 
      * @param user
      * @return
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public String[][] listAllTarefa(String user) throws SimpleExecption;
+    public String[][] listAllTarefa(String user) throws SimpleExeption;
 }

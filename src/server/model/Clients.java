@@ -7,7 +7,7 @@ package server.model;
 
 import java.util.HashMap;
 import java.util.concurrent.locks.ReentrantLock;
-import shared.SimpleExecption;
+import shared.SimpleExeption;
 
 /**
  *
@@ -22,12 +22,12 @@ public class Clients {
         this.clientsLock = new ReentrantLock();
     }
     
-    public Client getCliente(String user) throws SimpleExecption {
+    public Client getCliente(String user) throws SimpleExeption {
         clientsLock.lock();
         try {
             Client c = this.clients.get(user);
             if (c == null){
-                throw new SimpleExecption(3, "User", "Utilizador não Existe");
+                throw new SimpleExeption(3, "User", "Utilizador não Existe");
             }
             c.lock();
             return c;

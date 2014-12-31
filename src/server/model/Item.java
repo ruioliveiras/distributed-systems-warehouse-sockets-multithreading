@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import shared.SimpleExecption;
+import shared.SimpleExeption;
 
 /**
  *
@@ -54,13 +54,13 @@ public class Item {
         }
     }
 
-    public void itemWait() throws SimpleExecption {
+    public void itemWait() throws SimpleExeption {
         myLock.lock();
         try {
             try {
                 myCond.await();
             } catch (InterruptedException ex) {
-                throw new SimpleExecption(0, "INTERRUPTION", "interruption inside item");
+                throw new SimpleExeption(0, "INTERRUPTION", "interruption inside item");
             }
         } finally {
             myLock.unlock();

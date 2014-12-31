@@ -12,7 +12,7 @@ import shared.Menu;
 import server.model.Client;
 
 import java.util.Scanner;
-import shared.SimpleExecption;
+import shared.SimpleExeption;
 
 /**
  *
@@ -41,14 +41,14 @@ public class Interface {///implements Facede{
                     case 2: registar();
                             break;
                 }
-            }catch(SimpleExecption s){
+            }catch(SimpleExeption s){
                 System.err.println(s.getMessage());
             }
         } while (menulogreg.getOpcao()!=0);
     }
     
     
-    protected void login() throws SimpleExecption{
+    protected void login() throws SimpleExeption{
         Scanner is = new Scanner(System.in);
         String pass;
         
@@ -70,14 +70,14 @@ public class Interface {///implements Facede{
                     case 3: menuamigos(user);
                 }
 
-            }catch(SimpleExecption s){
+            }catch(SimpleExeption s){
                 System.err.println(s.getMessage());
             }
         } while (menumain.getOpcao()!=0);
     }
     
     
-    protected void registar()  throws SimpleExecption{
+    protected void registar()  throws SimpleExeption{
         Scanner is = new Scanner(System.in);
         boolean sair=false;
         String usern, pass;
@@ -164,7 +164,7 @@ public class Interface {///implements Facede{
     }
 */    
     
-    protected  void menuwareh() throws SimpleExecption{
+    protected  void menuwareh() throws SimpleExeption{
         do {
             menuware.executa();
             switch (menuware.getOpcao()) {
@@ -194,7 +194,7 @@ public class Interface {///implements Facede{
             System.out.println("Utilizador nao Existe!");
         }
     }
-    protected void menuamigos(String user) throws SimpleExecption{
+    protected void menuamigos(String user) throws SimpleExeption{
         String friend;
         do{
             System.out.println("Insera nome do cliente ou - para ver os nomes");
@@ -227,7 +227,7 @@ public class Interface {///implements Facede{
         } while (menuamigosSelect.getOpcao()!=0);        
     }
     
-    protected void menuuser(String user) throws SimpleExecption{
+    protected void menuuser(String user) throws SimpleExeption{
         do {
             menuselected.executa();
             switch (menuselected.getOpcao()) {
@@ -252,12 +252,12 @@ public class Interface {///implements Facede{
         } while (menuselected.getOpcao()!=0);
     }
     
-    public  boolean userExiste(String user) throws SimpleExecption{
+    public  boolean userExiste(String user) throws SimpleExeption{
         return false;
     }
         
      
-    public  void clistUser() throws SimpleExecption {
+    public  void clistUser() throws SimpleExeption {
         //Porque que o metodo recebe um username como argumento?
         String[] users = f.listUser(user);
         
@@ -266,7 +266,7 @@ public class Interface {///implements Facede{
     } 
       
      
-    public  void caddTipoTarefa(String user) throws SimpleExecption {
+    public  void caddTipoTarefa(String user) throws SimpleExeption {
         String tarefa;
         String[] objetos;
         Integer[] numbers;
@@ -288,14 +288,14 @@ public class Interface {///implements Facede{
         f.addTipoTarefa(user, tarefa, objetos, numbers);
     }
     
-    public void clistTipoTarefa(String user) throws SimpleExecption {
+    public void clistTipoTarefa(String user) throws SimpleExeption {
         String[] tiposTarefas = f.listTipoTarefa(user);
         System.out.println("Lista de Tipo de tareas do utilizador" + user + ":");
         for(String tar: tiposTarefas) System.out.println(tar);
     }
                         
     
-    public  void ciniciarTarefa(String user) throws SimpleExecption {
+    public  void ciniciarTarefa(String user) throws SimpleExeption {
         System.out.println("\nQual o tipo de tarefa a Iniciar?");
         String tarefa = Input.lerString();
         
@@ -304,7 +304,7 @@ public class Interface {///implements Facede{
     }
         
      
-//    public  void ceditTarefa(String user) throws SimpleExecption {
+//    public  void ceditTarefa(String user) throws SimpleExeption {
 //        Scanner is = new Scanner(System.in);
 //        String tarefa;
 //        String[] objetos = null;
@@ -332,7 +332,7 @@ public class Interface {///implements Facede{
 //"Listar as minhas de Tarefas", //listTarefa
 //"Listar as tarefas de todos"};//listAllTarefa
 
-    public  void ccloseTarefa(String user) throws SimpleExecption {
+    public  void ccloseTarefa(String user) throws SimpleExeption {
         Scanner is = new Scanner(System.in);
         String tarefa;
         
@@ -344,7 +344,7 @@ public class Interface {///implements Facede{
     }
         
      
-    public  void cstatusTarefa(String user) throws SimpleExecption {
+    public  void cstatusTarefa(String user) throws SimpleExeption {
         Scanner is = new Scanner(System.in);
         String tarefa;
         
@@ -357,7 +357,7 @@ public class Interface {///implements Facede{
     }    
     
      
-    public  void creadyTarefa(String user) throws SimpleExecption {
+    public  void creadyTarefa(String user) throws SimpleExeption {
         Scanner is = new Scanner(System.in);
         String tarefa;
         
@@ -370,7 +370,7 @@ public class Interface {///implements Facede{
     }
        
      
-    public  void cfinishedTarefa(String user) throws SimpleExecption {
+    public  void cfinishedTarefa(String user) throws SimpleExeption {
         Scanner is = new Scanner(System.in);
         
         
@@ -382,14 +382,14 @@ public class Interface {///implements Facede{
     }
     
     
-    public  void clistTarefa(String user) throws SimpleExecption {
+    public  void clistTarefa(String user) throws SimpleExeption {
         String[] tarefas = f.listTarefa(user);
         
         System.out.println("Lista de tareas do utilizador" + user + ":");
         for(String tar: tarefas) System.out.println(tar);
     } 
      
-    public  void caltObj() throws SimpleExecption {
+    public  void caltObj() throws SimpleExeption {
         Scanner is = new Scanner(System.in);
         String objeto;
         int q;
@@ -405,7 +405,7 @@ public class Interface {///implements Facede{
     }
     
      
-    public void clistObj() throws SimpleExecption {
+    public void clistObj() throws SimpleExeption {
         Tuple<String[], Integer[]> objetos = f.listObj();
         
         System.out.println("Lista de objetos no armazem:");

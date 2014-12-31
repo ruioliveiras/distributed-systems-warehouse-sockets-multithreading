@@ -37,18 +37,18 @@ public class Tuple<A,B> implements ComunicationSerializer.Serializer{
     }
 
     @Override
-    public String serialize(ComunicationSerializer ser) throws SimpleExecption {
+    public String serialize(ComunicationSerializer ser) throws SimpleExeption {
         return ser.serialize(a) + ">" + ser.serialize(b);
     }
 
     @Override
-    public void descerialize(ComunicationSerializer ser,String from) throws SimpleExecption {
+    public void descerialize(ComunicationSerializer ser,String from) throws SimpleExeption {
         String s[] = from.split(">");
         if (s.length == 2){
             a = ser.descerialize(s[0], a);
             b = ser.descerialize(s[1], b);
         } else {
-            throw new SimpleExecption(1, "Serializer", "Tuple with invalid argumes" + from);
+            throw new SimpleExeption(1, "Serializer", "Tuple with invalid argumes" + from);
         }
     }
 

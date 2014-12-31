@@ -7,9 +7,11 @@ package server;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import shared.ComunicationSocket;
 import shared.Facede;
-import shared.SimpleExecption;
+import shared.SimpleExeption;
 
 /**
  *
@@ -51,7 +53,7 @@ public class ClientHandler implements Runnable {
                 messageCode = cs.readMessage();
                 try{
                     forwarder(messageCode);
-                }catch(SimpleExecption se){
+                }catch(SimpleExeption se){
                     if (se.getLevel()> 1){
                         response(false, se.getMessage());
                     }else {
@@ -59,12 +61,17 @@ public class ClientHandler implements Runnable {
                     }
                 }
             } while (true);
-        } catch (SimpleExecption e) {
+        } catch (SimpleExeption e) {
+            try{
+                response(false, "Erro interno");
+                socket.shutdownInput();
+                socket.shutdownOutput();
+            }catch(Exception e1){}
            System.err.println(messageCode+ " - "+e.getMessage());
         }
     }
 
-    private void forwarder(int messageCode) throws SimpleExecption {
+    private void forwarder(int messageCode) throws SimpleExeption {
         String str = "string";
         Integer i = 1;
         Integer[] iArray = {1};
@@ -72,7 +79,7 @@ public class ClientHandler implements Runnable {
         
         //Esta autenticado
         if (messageCode != 1 && messageCode != 17 && !autenticado){
-            throw new SimpleExecption(3, "AUtenticação", "Nao pode efeturar esta ação porque nao esta autenticado");
+            throw new SimpleExeption(3, "AUtenticação", "Nao pode efeturar esta ação porque nao esta autenticado");
         }
         
         switch (messageCode) {
@@ -113,14 +120,14 @@ public class ClientHandler implements Runnable {
                 response(b,"");
                 return;
         }
-        throw new SimpleExecption(1, "ClienHANDLER", "Invalid message code" + messageCode);
+        throw new SimpleExeption(1, "ClienHANDLER", "Invalid message code" + messageCode);
     }
 
-    public void response(Boolean a, String message) throws SimpleExecption{
+    public void response(Boolean a, String message) throws SimpleExeption{
         cs.sendOK(a, message);
     }
     
-    public <T> void response(T a, String message) throws SimpleExecption{
+    public <T> void response(T a, String message) throws SimpleExeption{
         cs.sendOK(true, a);
     }
 }

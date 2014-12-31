@@ -9,7 +9,7 @@ package shared;
  *
  * @author ruioliveiras
  */
-public class SimpleExecption extends Exception{
+public class SimpleExeption extends Exception{
     protected int level;
     protected String code;
     protected String simpleMessage;
@@ -22,7 +22,7 @@ public class SimpleExecption extends Exception{
      * @param code
      * @param simpleMessage 
      */
-    public SimpleExecption(int lvl,String code, String simpleMessage) {
+    public SimpleExeption(int lvl,String code, String simpleMessage) {
         super("[" + code + "]" + simpleMessage);
         this.level = lvl;
         this.code = code;

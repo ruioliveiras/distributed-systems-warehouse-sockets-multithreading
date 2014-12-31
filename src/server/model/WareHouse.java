@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-import shared.SimpleExecption;
+import shared.SimpleExeption;
 import shared.Tuple;
 
 /**
@@ -60,9 +60,9 @@ public class WareHouse
      * aos items.
      * 
      * @param t
-     * @throws SimpleExecption 
+     * @throws SimpleExeption 
      */
-    public void want(Tarefa t) throws SimpleExecption {
+    public void want(Tarefa t) throws SimpleExeption {
         Tuple<Item[],Integer[]> tq = t.getItensTuple();
         Item[] items = tq.getA();
         Integer[] quaty = tq.getB();

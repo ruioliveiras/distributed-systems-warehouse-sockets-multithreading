@@ -14,12 +14,12 @@ import java.lang.reflect.Array;
 public class ComunicationSerializer {
     
     public interface Serializer{
-        public String serialize(ComunicationSerializer ser) throws SimpleExecption;
-        public void descerialize(ComunicationSerializer ser, String from) throws SimpleExecption;
+        public String serialize(ComunicationSerializer ser) throws SimpleExeption;
+        public void descerialize(ComunicationSerializer ser, String from) throws SimpleExeption;
         public Serializer clone();
     }
     
-    public <T> String serialize(T from) throws SimpleExecption {
+    public <T> String serialize(T from) throws SimpleExeption {
         if (from instanceof String){
             return (String)from;
         } else if(from instanceof Integer) {
@@ -29,10 +29,10 @@ public class ComunicationSerializer {
         } else if (from.getClass().isArray()){
             return serialize((T[]) from);
         }
-        throw new SimpleExecption(0, "Serializer", "Can't serialize: " + from.getClass());
+        throw new SimpleExeption(0, "Serializer", "Can't serialize: " + from.getClass());
     }
     
-    public <T> String serialize(T[] a) throws SimpleExecption {
+    public <T> String serialize(T[] a) throws SimpleExeption {
         String ret = "";
         int i;
         for (i = 0; i < a.length - 1; i++) {
@@ -44,11 +44,11 @@ public class ComunicationSerializer {
         return ret;
     }
     
-    public Integer descerialize(String from, Integer to) throws SimpleExecption{
+    public Integer descerialize(String from, Integer to) throws SimpleExeption{
         try {
             return Integer.parseInt(from);
         } catch (Exception e) {
-            throw new SimpleExecption(2, "SOCKET", "GetInt but isn't int");
+            throw new SimpleExeption(2, "SOCKET", "GetInt but isn't int");
         }
     }
 
@@ -56,7 +56,7 @@ public class ComunicationSerializer {
         return from;
     }
     
-    public <T> T descerialize(String from, T to) throws SimpleExecption {
+    public <T> T descerialize(String from, T to) throws SimpleExeption {
         if (to instanceof String){
             return (T) descerialize(from, (String) to);
         } else if(to instanceof Integer) {
@@ -74,7 +74,7 @@ public class ComunicationSerializer {
         return to;
     }
     
-    public <T> T[] descerialize(String from, T[] to) throws SimpleExecption{
+    public <T> T[] descerialize(String from, T[] to) throws SimpleExeption{
         if (from == null) {
             return (T[]) Array.newInstance(to.getClass().getComponentType(), 0);
         }

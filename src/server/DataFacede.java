@@ -15,7 +15,7 @@ import server.model.Tarefa;
 import server.model.WareHouse;
 import shared.Facede;
 import shared.Tuple;
-import shared.SimpleExecption;
+import shared.SimpleExeption;
 
 /**
  *
@@ -32,30 +32,30 @@ public class DataFacede implements Facede {
     }
 
     @Override
-    public Boolean addUser(String username, String password) throws SimpleExecption {
+    public Boolean addUser(String username, String password) throws SimpleExeption {
         Client c = new Client(username, password);
         clients.addClient(c);
         return true;
     }
 
     @Override
-    public String[] listUser(String username) throws SimpleExecption {
+    public String[] listUser(String username) throws SimpleExeption {
         return clients.allClientNames();
     }
 
     @Override
-    public Boolean supplyObj(String nome, int quantidade) throws SimpleExecption {
+    public Boolean supplyObj(String nome, int quantidade) throws SimpleExeption {
         wareHouse.supply(nome, quantidade);
         return true;
     }
 
     @Override
-    public Tuple<String[], Integer[]> listObj() throws SimpleExecption {
+    public Tuple<String[], Integer[]> listObj() throws SimpleExeption {
         return wareHouse.getAllObj();
     }
 
     @Override
-    public Boolean addTipoTarefa(String user, String tipoTarefa, String[] objs, Integer[] quants) throws SimpleExecption {
+    public Boolean addTipoTarefa(String user, String tipoTarefa, String[] objs, Integer[] quants) throws SimpleExeption {
         Item[] items = wareHouse.getItems(objs);
         try (Client c = clients.getCliente(user)) {
             TipoTarefa t = new TipoTarefa(tipoTarefa, items, quants);
@@ -65,14 +65,14 @@ public class DataFacede implements Facede {
     }
 
     @Override
-    public String[] listTipoTarefa(String user) throws SimpleExecption {
+    public String[] listTipoTarefa(String user) throws SimpleExeption {
         try (Client c = clients.getCliente(user)) {
             return c.allTipoTarefas();
         }
     }
 
     @Override
-    public String openTarefa(String user, String tipoTarefa) throws SimpleExecption {
+    public String openTarefa(String user, String tipoTarefa) throws SimpleExeption {
         try (Client c = clients.getCliente(user)) {
             TipoTarefa tt = c.getTipoTarefa(tipoTarefa);
             Tarefa t = new Tarefa(tt);
@@ -94,7 +94,7 @@ public class DataFacede implements Facede {
                         t.setEstado("working");
                         t.getConditionReady().signalAll();
                     }
-                } catch (SimpleExecption ex) {
+                } catch (SimpleExeption ex) {
                     t.setEstado("Exection occurred:" + ex.getMessage());
                 }
             }
@@ -102,7 +102,7 @@ public class DataFacede implements Facede {
     }
 
     @Override
-    public Boolean closeTarefa(String user, String codTarefa) throws SimpleExecption {
+    public Boolean closeTarefa(String user, String codTarefa) throws SimpleExeption {
         try (Client c = clients.getCliente(user)) {
             Tarefa t = c.remTarefa(codTarefa);
             wareHouse.dontWantMore(t);
@@ -112,24 +112,24 @@ public class DataFacede implements Facede {
     }
 
     @Override
-    public String statusTarefa(String user, String codTarefa) throws SimpleExecption {
+    public String statusTarefa(String user, String codTarefa) throws SimpleExeption {
         try (Client c = clients.getCliente(user)) {
             return c.getTarefa(codTarefa).getEstado();
         }
     }
 
     @Override
-    public Boolean login(String username, String password) throws SimpleExecption {
+    public Boolean login(String username, String password) throws SimpleExeption {
         try (Client c = clients.getCliente(username)) {
             if (!c.getPassword().equals(password)) {
-                throw new SimpleExecption(2, "LOGIN", "invalid login or password");
+                throw new SimpleExeption(2, "LOGIN", "invalid login or password");
             }
             return true;
         }
     }
 
     @Override
-    public Boolean readyTarefa(String user, String codTarefa) throws SimpleExecption {
+    public Boolean readyTarefa(String user, String codTarefa) throws SimpleExeption {
         try (Client c = clients.getCliente(user)) {
             c.waitToReady(codTarefa);
             return true;
@@ -137,7 +137,7 @@ public class DataFacede implements Facede {
     }
 
     @Override
-    public Boolean finishedTarefa(String user, String codTarefa) throws SimpleExecption {
+    public Boolean finishedTarefa(String user, String codTarefa) throws SimpleExeption {
         try (Client c = clients.getCliente(user)) {
             c.waitToFinished(codTarefa);
             return true;
@@ -145,14 +145,14 @@ public class DataFacede implements Facede {
     }
 
     @Override
-    public String[] listTarefa(String user) throws SimpleExecption {
+    public String[] listTarefa(String user) throws SimpleExeption {
         try (Client c = clients.getCliente(user)) {
             return c.allTarefas();
         }
     }
 
     @Override
-    public String[][] listAllTarefa(String user) throws SimpleExecption {
+    public String[][] listAllTarefa(String user) throws SimpleExeption {
 //        String[] ret[];
 //        clientsLock.lock();
 //        try {

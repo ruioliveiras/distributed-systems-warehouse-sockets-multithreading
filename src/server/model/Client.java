@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import shared.SimpleAutoCloseable;
-import shared.SimpleExecption;
+import shared.SimpleExeption;
 
 /**
  *
@@ -84,45 +84,45 @@ public class Client implements Lock, SimpleAutoCloseable{
             return t.getCodigo();
     }
 
-    public TipoTarefa getTipoTarefa(String tipoTarefa) throws SimpleExecption {
+    public TipoTarefa getTipoTarefa(String tipoTarefa) throws SimpleExeption {
             TipoTarefa tt = tarefas.get(tipoTarefa);
             if (tt == null) {
-                throw new SimpleExecption(3, "TipoTarefa", "Tipo de tareafa não Existe");
+                throw new SimpleExeption(3, "TipoTarefa", "Tipo de tareafa não Existe");
             }
             return tt;
     }
 
-    public Tarefa getTarefa(String codTarefa) throws SimpleExecption{
+    public Tarefa getTarefa(String codTarefa) throws SimpleExeption{
             Tarefa t = tarefasExec.get(codTarefa);
             if (t == null) {
-                throw new SimpleExecption(3, "Tarefa", "codigo tarefa não Existe");
+                throw new SimpleExeption(3, "Tarefa", "codigo tarefa não Existe");
             }
             return t;
     }
 
-    public Tarefa remTarefa(String codTarefa) throws SimpleExecption{
+    public Tarefa remTarefa(String codTarefa) throws SimpleExeption{
             Tarefa t = tarefasExec.remove(codTarefa);
             if (t == null){
-                throw new SimpleExecption(3,"Tarefa","codigo de tarefa não existe");
+                throw new SimpleExeption(3,"Tarefa","codigo de tarefa não existe");
             }
             return t;
     }
 
-    public void waitToFinished(String codTarefa) throws SimpleExecption{
+    public void waitToFinished(String codTarefa) throws SimpleExeption{
         try {
             Tarefa t = getTarefa(codTarefa);
             t.getConditionFinished().await();
         } catch (InterruptedException ex) {
-            throw new SimpleExecption(0, "INTERRUPT", "Interrupt exception have ocurred");
+            throw new SimpleExeption(0, "INTERRUPT", "Interrupt exception have ocurred");
         } 
     }
 
-    public void waitToReady(String codTarefa) throws SimpleExecption{
+    public void waitToReady(String codTarefa) throws SimpleExeption{
         try {
             Tarefa t = getTarefa(codTarefa);
             t.getConditionReady().await();
         } catch (InterruptedException ex) {
-            throw new SimpleExecption(0, "INTERRUPT", "Interrupt exception have ocurred");
+            throw new SimpleExeption(0, "INTERRUPT", "Interrupt exception have ocurred");
         }
     }
 
@@ -157,7 +157,7 @@ public class Client implements Lock, SimpleAutoCloseable{
     }
 
     @Override
-    public void close() throws SimpleExecption {
+    public void close() throws SimpleExeption {
         lock.unlock();
     }
 
