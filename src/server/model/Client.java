@@ -12,13 +12,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import shared.SimpleAutoCloseable;
 import shared.SimpleExecption;
 
 /**
  *
  * @author Jose
  */
-public class Client implements Lock{
+public class Client implements Lock, SimpleAutoCloseable{
 
     private final ReentrantLock lock = new ReentrantLock();
     private final String nome, password;
@@ -153,6 +154,11 @@ public class Client implements Lock{
     @Override
     public Condition newCondition() {
         return lock.newCondition();
+    }
+
+    @Override
+    public void close() throws SimpleExecption {
+        lock.unlock();
     }
 
 }

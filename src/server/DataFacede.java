@@ -57,120 +57,97 @@ public class DataFacede implements Facede {
     @Override
     public Boolean addTipoTarefa(String user, String tipoTarefa, String[] objs, Integer[] quants) throws SimpleExecption {
         Item[] items = wareHouse.getItems(objs);
-        Client c = clients.getCliente(user);
-        try {
+        try (Client c = clients.getCliente(user)) {
             TipoTarefa t = new TipoTarefa(tipoTarefa, items, quants);
             c.addTipoTarefa(t);
             return true;
-        } finally {
-            c.unlock();
         }
     }
 
     @Override
     public String[] listTipoTarefa(String user) throws SimpleExecption {
-        Client c = clients.getCliente(user);
-        try {
+        try (Client c = clients.getCliente(user)) {
             return c.allTipoTarefas();
-        } finally {
-            c.unlock();
         }
     }
 
     @Override
     public String openTarefa(String user, String tipoTarefa) throws SimpleExecption {
-        Client c = clients.getCliente(user);
-        try {
+        try (Client c = clients.getCliente(user)) {
             TipoTarefa tt = c.getTipoTarefa(tipoTarefa);
             Tarefa t = new Tarefa(tt);
             c.addTarefa(t);
-            Thread thr = new Thread(this.warehouseWant(t));
+            Thread thr = new Thread(this.warehouseWant(user, t));
             thr.start();
             return t.getCodigo();
-        } finally {
-            c.unlock();
         }
     }
-    
-    private Runnable warehouseWant(final Tarefa t) {
+
+    private Runnable warehouseWant(final String user, final Tarefa t) {
         return new Runnable() {
-           @Override
+            @Override
             public void run() {
-               try {
-                   wareHouse.want(t);
-                   t.setEstado("working");
-               } catch (SimpleExecption ex) {
-                   t.setEstado("Exection occurred:" + ex.getMessage());
-               }
+                try {
+                    // isto acontece porque os items de uma tarefa em execução nao podem ser modificados
+                    wareHouse.want(t);
+                    try (Client c = clients.getCliente(user)) {
+                        t.setEstado("working");
+                        t.getConditionReady().signalAll();
+                    }
+                } catch (SimpleExecption ex) {
+                    t.setEstado("Exection occurred:" + ex.getMessage());
+                }
             }
         };
     }
 
     @Override
     public Boolean closeTarefa(String user, String codTarefa) throws SimpleExecption {
-        Client c = clients.getCliente(user);
-        try {
+        try (Client c = clients.getCliente(user)) {
             Tarefa t = c.remTarefa(codTarefa);
             wareHouse.dontWantMore(t);
+            t.getConditionFinished().signalAll();
             return true;
-        } finally {
-            c.unlock();
         }
     }
 
     @Override
     public String statusTarefa(String user, String codTarefa) throws SimpleExecption {
-        Client c = clients.getCliente(user);
-        try {
+        try (Client c = clients.getCliente(user)) {
             return c.getTarefa(codTarefa).getEstado();
-        } finally {
-            c.unlock();
         }
     }
 
     @Override
     public Boolean login(String username, String password) throws SimpleExecption {
-        Client c = clients.getCliente(username);
-        try {
+        try (Client c = clients.getCliente(username)) {
             if (!c.getPassword().equals(password)) {
                 throw new SimpleExecption(2, "LOGIN", "invalid login or password");
             }
             return true;
-        } finally {
-            c.unlock();
         }
     }
 
     @Override
     public Boolean readyTarefa(String user, String codTarefa) throws SimpleExecption {
-
-        Client c = clients.getCliente(user);
-        try {
+        try (Client c = clients.getCliente(user)) {
             c.waitToReady(codTarefa);
             return true;
-        } finally {
-            c.unlock();
         }
     }
 
     @Override
     public Boolean finishedTarefa(String user, String codTarefa) throws SimpleExecption {
-        Client c = clients.getCliente(user);
-        try {
+        try (Client c = clients.getCliente(user)) {
             c.waitToFinished(codTarefa);
             return true;
-        } finally {
-            c.unlock();
         }
     }
 
     @Override
     public String[] listTarefa(String user) throws SimpleExecption {
-        Client c = clients.getCliente(user);
-        try {
+        try (Client c = clients.getCliente(user)) {
             return c.allTarefas();
-        } finally {
-            c.unlock();
         }
     }
 

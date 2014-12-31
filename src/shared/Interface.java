@@ -253,7 +253,7 @@ public class Interface {///implements Facede{
     }
     
     public  boolean userExiste(String user) throws SimpleExecption{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return false;
     }
         
      
