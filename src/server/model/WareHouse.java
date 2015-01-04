@@ -7,9 +7,6 @@
 package server.model;
 
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import shared.SimpleExeption;
 import shared.Tuple;
@@ -20,20 +17,13 @@ import shared.Tuple;
  */
 public class WareHouse 
 {   
-    private final HashMap<String, Client> clientes;
     private final HashMap<String, Item> armazem;
-    private final ReentrantLock clientsLock;
     private final ReentrantLock armazemLock;
-    private Condition cond;
-    
     
     public WareHouse()
     {
         this.armazem = new HashMap<>();
-        this.clientes = new HashMap<>();
         this.armazemLock = new ReentrantLock();
-        this.clientsLock = new ReentrantLock();
-        cond = armazemLock.newCondition();
     }
     
     private Item getOrCreate(String nome){
@@ -117,7 +107,7 @@ public class WareHouse
      * @return 
      */
     public Item[] getItems(String[] objs) {
-        clientsLock.lock();
+        armazemLock.lock();
         try {
             Item[] res = new Item[objs.length];
             int i = 0;
@@ -127,7 +117,7 @@ public class WareHouse
             }
             return res;
         } finally {
-            clientsLock.unlock();
+            armazemLock.unlock();
         }
     }
 
