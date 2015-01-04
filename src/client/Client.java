@@ -25,13 +25,19 @@ public class Client implements Facede {
     /**
      *
      * @throws IOException
+     * @throws shared.SimpleExeption
      */
-    public Client() throws IOException {
-        cliente = new Socket("localhost", 1050);
+    public Client() throws IOException, SimpleExeption {
+       try{
+            cliente = new Socket("localhost", 1050);
+       }catch(java.net.ConnectException a){
+           throw new SimpleExeption(1,"INIT","Server nao esta disponivel");
+       }
+        
         cs = new ComunicationSocket(cliente);
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException, SimpleExeption {
         Client rc = new Client();
         while (true) {
 //            rc.sms("ola ");
