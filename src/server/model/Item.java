@@ -22,6 +22,9 @@ public class Item {
     private final Lock myLock;
     private final Condition myCond;
 
+    /** Contructs a new Item
+     * 
+     */
     public Item() {
         this.quantidade = 0;
         this.nome = "";
@@ -29,6 +32,11 @@ public class Item {
         this.myCond = myLock.newCondition();
     }
 
+    /** Constructs a new Item with the name and the quantity
+     * 
+     * @param nome name of the Item
+     * @param quantidade quantity of the Item
+     */
     public Item(String nome, int quantidade) {
         this.quantidade = quantidade;
         this.nome = nome;
@@ -36,14 +44,26 @@ public class Item {
         this.myCond = myLock.newCondition();
     }
 
+    /** Gets the name of the Item
+     * 
+     * @return the name of the Item
+     */
     public String getNome() {
         return nome;
     }
 
+    /** Gets the quantity of the Item
+     * 
+     * @return the quantity of the Item
+     */
     public int getQuantidade() {
         return quantidade;
     }
-
+    
+    /** Adds a certain ammount to an item 
+     * 
+     * @param quantidade ammount to be added
+     */
     public void add(int quantidade) {
         myLock.lock();
         try {
@@ -54,6 +74,10 @@ public class Item {
         }
     }
 
+    /**
+     * 
+     * @throws SimpleExeption 
+     */
     public void itemWait() throws SimpleExeption {
         myLock.lock();
         try {
@@ -66,7 +90,11 @@ public class Item {
             myLock.unlock();
         }
     }
-
+    /** Retrieves a certain ammount of an Item
+     * 
+     * @param quantidade ammount to be retrieved
+     * @return True if there is enough ammount to be retrived, False otherwise
+     */
     public boolean retrieve(int quantidade) {
 
         myLock.lock();

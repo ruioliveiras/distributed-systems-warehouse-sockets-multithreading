@@ -18,26 +18,42 @@ public class Tarefa extends TipoTarefa {
     private Condition ready;
     private Condition finished;
 
+    /** Constructs a new Tarefa
+     * 
+     * @param f 
+     */
     public Tarefa(TipoTarefa f) {
         super(f);
         this.estado = "waiting";
     }
 
+    /** Sets the state
+     * 
+     * @param s state to be set
+     */
     public void setEstado(String s) {
         this.estado = s;
     }
 
+    /** Gets the state
+     * 
+     * @return current state
+     */
     public String getEstado() {
         return this.estado;
     }
 
+    /** Gets the code of Tarefa
+     * 
+     * @return the code of Tarefa
+     */
     public String getCodigo() {
         return codigo;
     }
 
     /** Warning this method should be called with Client lock
      * 
-     * @param string 
+     * @param string code to be set
      */
     public void setCodigo(String string) {
         this.codigo = string;
@@ -45,7 +61,7 @@ public class Tarefa extends TipoTarefa {
     
     /** Warning this method should be called with Client lock
      * 
-     * @param finished 
+     * @param finished condition to be set
      */
     void setConditionFinished(Condition finished) {
         this.finished = finished;
@@ -54,7 +70,7 @@ public class Tarefa extends TipoTarefa {
     
     /** Warning this method should be called with Client lock
      * 
-     * @param finished 
+     * @param ready condition to be set 
      */
     void setConditionReady(Condition ready) {
         this.ready = ready;
@@ -63,7 +79,7 @@ public class Tarefa extends TipoTarefa {
     
     /** Warning this method should be called with Client lock
      * 
-     * @return  
+     * @return 
      */
     public Condition getConditionFinished() {
         return finished;

@@ -25,6 +25,13 @@ public class ClientHandler implements Runnable {
     private Facede data;
     private boolean autenticado;
 
+    /** Constructs a new ClientHandler 
+     * 
+     * @param parent
+     * @param socket
+     * @param facade
+     * @throws IOException 
+     */
     public ClientHandler(Server parent, Socket socket, Facede facade) throws IOException {
         this.parent = parent;
         this.data = facade;
@@ -32,6 +39,10 @@ public class ClientHandler implements Runnable {
         this.autenticado = false;
     }
 
+    /** Starts the ComunicationSocket
+     * 
+     * @throws IOException 
+     */
     private void init() throws IOException {
         cs = new ComunicationSocket(socket);
     }

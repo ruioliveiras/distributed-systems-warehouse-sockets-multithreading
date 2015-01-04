@@ -20,12 +20,20 @@ public class WareHouse
     private final HashMap<String, Item> armazem;
     private final ReentrantLock armazemLock;
     
+    /** Constructs a new WareHouse
+     * 
+     */
     public WareHouse()
     {
         this.armazem = new HashMap<>();
         this.armazemLock = new ReentrantLock();
     }
     
+    /** Gets an Item from the WareHouse. If the Item does not exist create a new one
+     * 
+     * @param nome name of the item
+     * @return item
+     */
     private Item getOrCreate(String nome){
         Item item = armazem.get(nome);
         if (item == null) {
@@ -35,6 +43,11 @@ public class WareHouse
         return item;
     }
     
+    /** Adds a certain amount to an item
+     * 
+     * @param nome name of the item
+     * @param quant ammount to be added
+     */
     public void supply(String nome, int quant)
     {
         armazemLock.lock();
@@ -79,6 +92,10 @@ public class WareHouse
         }while(iWait != -1);
     }
     
+    /** Finishs a Tarefa
+     * 
+     * @param t Tarefa to be finnished
+     */
     public void dontWantMore(Tarefa t)
     {
         Item[] it = t.getItems();
@@ -89,6 +106,10 @@ public class WareHouse
         }
     }
  
+    /** Returns 
+     * 
+     * @return a tuple with the name of the all items and the respective amount
+     */
     public Tuple<String[],Integer[]> getAllObj() {
         String[] values = new String[armazem.size()];
         Integer[] quats = new Integer[armazem.size()];
@@ -103,8 +124,8 @@ public class WareHouse
 
     /** Get Items just to Have you reference to items, the items are not locked
      *  
-     * @param objs
-     * @return 
+     * @param objs the list with the name of the items
+     * @return the list with the items
      */
     public Item[] getItems(String[] objs) {
         armazemLock.lock();

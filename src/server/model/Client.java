@@ -26,7 +26,10 @@ public class Client implements Lock, SimpleAutoCloseable{
     private final HashMap<String, TipoTarefa> tarefas;
     private final HashMap<String, Tarefa> tarefasExec;
     private int tarefasExecCod;
-
+    
+    /** Constructs a new Client
+     * 
+     */
     public Client() {
         this.tarefasExecCod = 0;
         this.nome = "";
@@ -35,6 +38,11 @@ public class Client implements Lock, SimpleAutoCloseable{
         this.tarefasExec = new HashMap<>();
     }
 
+    /** Constructs a new Client with a name and a password
+     * 
+     * @param nome name of the Client
+     * @param password password of the Client
+     */
     public Client(String nome, String password) {
         this.tarefasExecCod = 0;
         this.nome = nome;
@@ -43,14 +51,26 @@ public class Client implements Lock, SimpleAutoCloseable{
         this.tarefasExec = new HashMap<>();
     }
 
+    /** Gets the name of the client
+     * 
+     * @return the name of the client
+     */
     public String getNome() {
         return nome;
     }
 
+    /** Gets the password of the client
+     * 
+     * @return the password of the client
+     */
     public String getPassword() {
         return password;
     }
-
+    
+    /** Returns all TipoTarefas from the client
+     * 
+     * @return list of all TipoTarefas from the client
+     */
     public String[] allTipoTarefas() {
             String[] t = new String[tarefas.size()];
             int i = 0;
@@ -60,7 +80,11 @@ public class Client implements Lock, SimpleAutoCloseable{
             return t;
         
     }
-
+    
+    /** Returns all executing Tarefa from the client
+     * 
+     * @return list of all Tarefa from the client
+     */
     public String[] allTarefas() {
             String[] t = new String[tarefasExec.size()];
             int i = 0;
@@ -68,13 +92,22 @@ public class Client implements Lock, SimpleAutoCloseable{
                 t[i++] = va.getCodigo();
             }
             return t;
-            }
-
+    }
+    
+    /** Adds a TipoTarefa
+     * 
+     * @param t TipoTarefa to be added
+     */
     public void addTipoTarefa(TipoTarefa t) {
             tarefas.put(t.getNome(), t);
         
     }
-
+    
+    /** Adds a Tarefa
+     * 
+     * @param t Tarefa to be added
+     * @return the code of Tarefa
+     */
     public String addTarefa(Tarefa t) {
             tarefasExecCod++;
             t.setCodigo(this.nome + "_" + tarefasExecCod);
@@ -83,7 +116,13 @@ public class Client implements Lock, SimpleAutoCloseable{
             tarefasExec.put(t.getCodigo(), t);
             return t.getCodigo();
     }
-
+    
+    /** Gets a TipoTarefa
+     * 
+     * @param tipoTarefa the identifier of the tipoTarefa
+     * @return 
+     * @throws SimpleExeption 
+     */
     public TipoTarefa getTipoTarefa(String tipoTarefa) throws SimpleExeption {
             TipoTarefa tt = tarefas.get(tipoTarefa);
             if (tt == null) {
@@ -91,7 +130,13 @@ public class Client implements Lock, SimpleAutoCloseable{
             }
             return tt;
     }
-
+    
+    /** Gets a Tarefa
+     * 
+     * @param codTarefa code of the Tarefa
+     * @return the Tarefa
+     * @throws SimpleExeption 
+     */
     public Tarefa getTarefa(String codTarefa) throws SimpleExeption{
             Tarefa t = tarefasExec.get(codTarefa);
             if (t == null) {
@@ -99,7 +144,13 @@ public class Client implements Lock, SimpleAutoCloseable{
             }
             return t;
     }
-
+    
+    /** Removes a Tarefa
+     * 
+     * @param codTarefa code of Tarefa
+     * @return
+     * @throws SimpleExeption 
+     */
     public Tarefa remTarefa(String codTarefa) throws SimpleExeption{
             Tarefa t = tarefasExec.remove(codTarefa);
             if (t == null){
@@ -107,7 +158,12 @@ public class Client implements Lock, SimpleAutoCloseable{
             }
             return t;
     }
-
+    
+    /**
+     * 
+     * @param codTarefa code of Tarefa
+     * @throws SimpleExeption 
+     */
     public void waitToFinished(String codTarefa) throws SimpleExeption{
         try {
             Tarefa t = getTarefa(codTarefa);
@@ -116,7 +172,12 @@ public class Client implements Lock, SimpleAutoCloseable{
             throw new SimpleExeption(0, "INTERRUPT", "Interrupt exception have ocurred");
         } 
     }
-
+    
+    /**
+     * 
+     * @param codTarefa code of Tarefa
+     * @throws SimpleExeption 
+     */
     public void waitToReady(String codTarefa) throws SimpleExeption{
         try {
             Tarefa t = getTarefa(codTarefa);

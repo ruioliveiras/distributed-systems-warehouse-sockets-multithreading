@@ -25,12 +25,19 @@ public class Server implements Runnable{
     private Map<Integer,ClientHandler> requests;
     private Facede facade;
     
-    
+    /** Constructs a new Server
+     * 
+     * @throws IOException 
+     */
     public Server() throws IOException {
         ss = new ServerSocket(1050);
         facade = new DataFacede();
     }
     
+    /** Starts the server
+     * 
+     * @throws IOException 
+     */
     public void start() throws IOException{
         while(true){
             Socket cn = ss.accept();

@@ -17,11 +17,20 @@ public class Clients {
     private final HashMap<String, Client> clients;
     private final ReentrantLock clientsLock;
 
+    /** Constructs a new Clients
+     * 
+     */
     public Clients() {
         this.clients = new HashMap<>();
         this.clientsLock = new ReentrantLock();
     }
     
+    /** Gets the Client
+     * 
+     * @param user name of the user
+     * @return the user
+     * @throws SimpleExeption 
+     */
     public Client getCliente(String user) throws SimpleExeption {
         clientsLock.lock();
         try {
@@ -36,6 +45,10 @@ public class Clients {
         }
     }
     
+    /** Adds a Client
+     * 
+     * @param c Client to be added
+     */
     public void addClient(Client c){
         clientsLock.lock();
         try {
@@ -45,6 +58,10 @@ public class Clients {
         }
     }
     
+    /** Gets all the names of the clients
+     * 
+     * @return the list with all the names of the clients
+     */
     public String[] allClientNames(){
         clientsLock.lock();
         try {
