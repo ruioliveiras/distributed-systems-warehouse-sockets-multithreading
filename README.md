@@ -1,13 +1,11 @@
-** \*=== FitenessUM ===\***
+** \*=== WarehouseUM ===\***
 ==============
 
 **Developers:**
 
-Andre Santos  -> andrerfcsantos AT gmail DOT com
-
-Rui Camposinhos -> rui DOT camposinhos AT gmail DOT com
-
+...
 (Owner) Rui Oliveira -> rui96pedro AT hotmail DOT com
+...
 
 --------------
 
