@@ -32,12 +32,12 @@ This software was created for a practical work in Distributed Systems. Was reque
 Each Client is identified by his Username and password.
 
 ** Features: **
-- The warehouse as many clients.
-- Each client has many task types, each task Type requires a list of Items with is quantity.
-- Each client can start many task types as he want to, creating an Task.
-- Each task as a State: Waiting - when there are not the required items in the Warehouse, Doing - waiting to Client to end the task
-- When the client end is task the items are restored in the Warehouse.
-- The Warehouse as many Items and the actual quantity in the warehouse.
+* The warehouse as many clients.
+* Each client has many task types, each task Type requires a list of Items with is quantity.
+* Each client can start many task types as he want to, creating an Task.
+* Each task as a State: Waiting - when there are not the required items in the Warehouse, Doing - waiting to Client to end the task
+* When the client end is task the items are restored in the Warehouse.
+* The Warehouse as many Items and the actual quantity in the warehouse.
 
 1) Implementation highlights
 ==============
