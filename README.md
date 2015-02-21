@@ -64,4 +64,4 @@ For the Concurrency control was used: hand made Monitors with ReentrantLock, Loc
 2) Schema
 ==============
 
-![sd1.png](https://bitbucket.org/repo/ByggeX/images/665514226-sd1.png)
+![sd1.png](https://bitbucket.org/repo/ByggeX/images/2842833182-sd1.png)
