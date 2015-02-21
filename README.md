@@ -32,6 +32,7 @@ This software was created for a practical work in Distributed Systems. Was reque
 Each Client is identified by his Username and password.
 
 ** Features: **
+
 * The warehouse as many clients.
 * Each client has many task types, each task Type requires a list of Items with is quantity.
 * Each client can start many task types as he want to, creating an Task.
