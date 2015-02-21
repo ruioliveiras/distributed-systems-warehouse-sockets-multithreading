@@ -3,9 +3,10 @@
 
 **Developers:**
 
-...
 (Owner) Rui Oliveira -> rui96pedro AT hotmail DOT com
-...
+Tomas Ferreira
+José Pereira
+Jorge Ferreira
 
 --------------
 
@@ -56,4 +57,3 @@ CommunicationSocket is an abstraction to the Socket, and have methods like: send
 ==============
 
 For the Concurrency control was used: hand made Monitors with ReentrantLock, Lock chaining, Conditions.
-
