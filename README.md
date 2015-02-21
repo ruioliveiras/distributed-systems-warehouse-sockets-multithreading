@@ -23,6 +23,8 @@ Jorge Ferreira
 
 **1.1) Concurrency control**
 
+** 2) Schema **
+
 0) Abstract
 ==============
 
